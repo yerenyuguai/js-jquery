@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX POST请求</title>
+    <style>
+        #div2{
+            width: 200px;
+            height: 200px;
+            border: 2px solid red;
+        }
+    </style>
+    <!-- 
+        实现功能  鼠标放在div上，把服务端返回的 响应体结果在div中呈现   页面不刷新
+     -->
+</head>
+<body>
+    <div id="div2"></div>
+</body>
+<script >
+    //获取元素对象
+    const res=document.getElementById('div2');
+    //绑定事件  addEventListener("mouseover"...) 
+    res.addEventListener("mouseover",function(){
+      // 创建对象
+      const xhr=new XMLHttpRequest();
+      //  初始化 设置类型和 url
+      xhr.open('POST','http://127.0.0.1:8000/server');
+      //设置请求头  第一个参数设置请求体内容的类型   ，第二个参数 参数查询字符串类型的一个固定写法
+      xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+      //设置一个自定义的请求头
+      xhr.setRequestHeader('name','hhhhhhaa');
+
+      //发送
+      xhr.send('a=100&b=200&c=300');  //post请求参数是在send里面的★★★★
+      //  不需要？进行分割
+      //   send()传参格式不固定  只要服务端可以处理都可以xhr.send('a:100&b:100');xhr.send('123214');都可以
+      // 但还是按上面格式来吧
+       
+      //事件绑定
+      xhr.onreadystatechange=function(){
+          if(xhr.readyState==4&&xhr.status>=200&&xhr.status<300){
+              //处理服务端返回的结果
+              res.innerHTML=xhr.response;
+          }
+      }
+    })
+</script>
+</html>

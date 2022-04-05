@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原理展示</title>
+    <!-- 
+1) JISONP 是什么
+JSONP (JSON with Padding)，是一个非官方的跨域解决方案，但是只支持get请求。I
+2) JSONP怎么工作的?
+在网页有一些标签，天生具有跨域能力，比如: img link iframe script。
+JSONP就是利用script标签的跨域能力来发送请求的。
+3) JSONP 的使用
+1.动态的创建一个script标签
+        var script = document.createElement("script");
+2.设置script的src,设置回调函数
+    scriptsrc = "http://localhost:3000/testAJAX?callback=abc";
+ -->
+ <style>
+     #result{
+         width: 200px;
+         height: 200px;
+         border: 2px solid rebeccapurple;
+     }
+ </style>
+</head>
+<body>
+    <div id="result"></div>
+</body>
+<!-- handle方法本来卸载app.js里的，但现在拿到html里来
+   说明下面的<script src="http://127.0.0.1:5500/js02/%E8%B7%A8%E5%9F%9F/JSONP/app.js"></script>
+    这句的返回结果是一个数据加一个函数的调用-->
+<script>
+    //处理数据
+function handle(data){
+    //获取元素
+    const result=document.getElementById('result');
+    result.innerHTML=data.name;
+}
+</script>
+      <!-- <script src="app.js"></script>  -->
+<!-- 下面的复制的是通过上面被注释掉的语句右键打开open with live server上的链接  app.js的链接 -->
+<!-- 
+    <script src="http://127.0.0.1:5500/js02/%E8%B7%A8%E5%9F%9F/JSONP/app.js"></script>
+ -->
+<!-- 上面的script标签就实现了跨域 -->
+<script src="http://127.0.0.1:9000/jsonp-server"></script>
+<!-- 使用server1里的app.all()  JSonP相关
+  script标签的src请求过去后，要到是函数的调用的内容，即为一段js代码，这样前端的js代码才能解析或执行js代码 
+    返回结果的形式，是一个函数调用，而这个函数的参数就是给客户端返回结果的数据，函数要提前声明好的
+这就是jsonp跨域实现的原理-->
+</html>

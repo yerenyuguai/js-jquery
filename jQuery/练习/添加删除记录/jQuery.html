@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #employeeTable {
+        width: 100%;
+        height: 100px;
+        border: 2px solid darkgoldenrod;
+    }
+    
+    #box2 {
+        background-color: #FF4500;
+    }
+    
+    #t {
+        font-size: 4;
+        background: #ADFF2F;
+    }
+    
+    tr {
+        border: 2px solid orange;
+        background-color: #F5DEB3;
+    }
+    
+    td {
+        text-align: center;
+        color: brown;
+    }
+</style>
+<body>
+    <table id="employeeTable">
+        <tr class="t">
+            <td>Name</td>
+            <td>Email</td>
+            <td>Salary</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr class="t">
+            <td>拐子</td>
+            <td>54250@syy.com</td>
+            <td>100</td>
+            <td>
+                <a href="deleteEmp?id=001">Delete</a>
+            </td>
+        </tr>
+        <tr class="t">
+            <td>野浩</td>
+            <td>514250@ddl.com</td>
+            <td>113</td>
+            <td>
+                <a href="deleteEmp?id=002">Delete</a>
+            </td>
+        </tr>
+        <tr class="t">
+            <td>洪少</td>
+            <td>1219@chh.com</td>
+            <td>120</td>
+            <td>
+                <a href="deleteEmp?id=003">Delete</a>
+            </td>
+        </tr>
+    </table>
+    <h3>添加新贵物</h3>
+    <table class="box2">
+        <table>
+            <tr>
+                <td class="word">Name: </td>
+                <td class="inp">
+                    <input type="text" name="empName" id="empName" />
+                </td>
+            </tr>
+            <tr>
+                <td class="word">Email: </td>
+                <td class="inp">
+                    <input type="text" name="email" id="email" />
+                </td>
+            </tr>
+            <tr>
+                <td class="word">Salary: </td>
+                <td class="inp">
+                    <input type="text" name="salary" id="salary" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" text-align="center">
+                    <button id="addEmpButton" value="abc">
+                        Submit
+                    </button>
+                </td>
+            </tr>
+        </table>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<script>
+// 添加
+$('#addEmpButton').click(function(){
+    //收集输入的数据
+    var $empName=$('#empName')//创建jQuery对象
+    var $email=$('#email')
+    var $salary=$('#salary')
+    var empName=$empName.val()//获取值
+    var email=$email.val();
+    var salary=$salary.val();
+    //生成对应的tr标签，并插入employeeTable中tbody中
+    /*
+    <tr class="t">
+            <td>洪少</td>
+            <td>1219@chh.com</td>
+            <td>120</td>
+            <td>
+                <a href="deleteEmp?id=003">Delete</a>
+            </td>
+    </tr>
+    */ //像模板这样
+    $('<tr></tr>')
+    .append('<td>'+empName+'</td>')//拼串
+    .append('<td>'+email+'</td>')
+    .append('<td>'+salary+'</td>')
+    .append('<td><a href="deleteEmp?id="'+Date.now()+'>Delete</a></td>')//Date.now()确保每次的id都不同
+    .appendTo('#employeeTable>tbody')//并插入employeeTable中tbody中
+    .find('a').click(clearDelete)//给所有删除链接绑定删除监听，find('a') 是找后代  a是tr后代
+    //清除输入的数据
+     $empName.val('')
+     $email.val('')
+     $salary.val('')
+})
+//删除
+$('#employeeTable a').click(clearDelete)
+// 点击删除的回调函数
+function clearDelete(){//#employeeTable a   注意是后代  不是子元素 ,子元素用这个#employeeTable>a
+ var $tr=$(this).parent().parent()//得到tr
+ var name=$tr.children(':first').html()//获取名字
+ if(confirm('确定删除'+name+'吗')){//确认后进入判断进行删除
+     $tr.remove();
+ }
+ return false;//取消默认行为,点击超链接会跳转
+}
+</script>
+</html>

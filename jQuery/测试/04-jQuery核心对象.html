@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery核心对象</title>
+    <!-- 即为指向jQuery核心函数返回的对象  
+    jQuery对象内部包含的是DOM元素对象的伪数组(可能只有一个元素)
+     伪数组是指数据结构与数组类似，但是不能使用数组的方法
+    jQuery对象拥有许多有用的属性和方法，让程序员能方便的操作dom -->
+
+    <!-- 
+1. jQuery是一个包含所有匹配的任意多Mdom.元素的伪数组对象
+2.基本行为
+*        size()/length:      包含的DOM元素个数  size()已经抛弃
+*        [index]/get(index): 得到对应位置的DOM元素
+*        each():             遍历包含的所有DOM元素
+*        index():            得到在所在兄弟元素中的下标
+需求:
+需求1.统计一共有多少个按钮
+需求2.取出第2个button的文本
+需求3.输出所有button 标签的文本
+需求4.输出'测试三'按钮是所有按钮中的第几个
+     -->
+</head>
+<body>
+    <button>测试一</button>
+    <button>测试二</button>
+    <button id="btn3">测试三</button>
+    <button>测试四</button>
+
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<!-- 去bootcdn引入的 -->
+<script type="text/javascript">
+   // 需求1.统计一共有多少个按钮
+   var $buttons=$('button');
+   // size()/length:      包含的DOM元素个数  ,$buttons.size()这个方法抛弃了
+   console.log($buttons.length);
+
+   //需求2.取出第2个button的文本
+   var $button=$('button')[1];
+  console.log($button.innerHTML);
+  console.log($buttons[1].innerHTML);//需求1取得的伪数组
+  console.log($buttons.get(1).innerHTML);//需求1取得的伪数组
+
+  //需求3.输出所有button 标签的文本
+  //  each(function(index,DOM元素){}) 
+  var $buttons=$('button');
+  $buttons.each(function(index,domEle){
+      console.log(index,domEle.innerHTML,this);//this就是每一个DOM元素
+  })
+  //或者
+  console.log('--------');
+  $buttons.each(function(){
+      console.log(this.innerHTML);
+  })
+
+  //需求4.输出'测试三'按钮是所有按钮中的第几个
+  $buttons.each(function(index){
+      if(this.innerHTML==='测试三'){
+          console.log('第'+(index+1)+'个');
+      }
+  })
+  //或者      index():            得到在所在兄弟元素中的下标   ★★★
+  console.log('下标是'+$('#btn3').index());
+
+  /*
+  伪数组    是Object对象
+  属性   length属性   和      数值下标属性
+  没有数组特别的方法 比如 forEach(),splice(),push()，pop()等
+  */
+ console.log($buttons instanceof Array);//说明不是数组，是伪数组
+ //创建和长度确定都是很笨的  自定义一个伪数组
+ var fakeArray={}
+ fakeArray.length=0;
+fakeArray[0]='拐子'
+fakeArray.length=1;
+fakeArray[1]=20;
+fakeArray.length=2;
+// 遍历输出
+for(var i=0;i<fakeArray.length;i++){
+    var obj=fakeArray[i];
+    console.log(i,obj);
+}
+//但是数组的方法  forEach()就用不了
+console.log(fakeArray.forEach,$buttons.forEach);// undifined,undefined
+</script>
+</html>

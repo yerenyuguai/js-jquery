@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--  IE缓存问题 
+    ie浏览器会对ajax这个请求结果去做一个缓存，把结果缓存起来，下一次再发送请求，获取的是缓存，而不是服务器的最新数据
+    这样对一些时效性比较强的，这个缓存反而会影响结果，所以我们需要解决缓存问题 -->
+    <style>
+        #div4{
+            width: 200px;
+            height: 200px;
+            border: 2px solid green;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn02">点我发送请求</button>
+    <div id="div4"></div>
+</body>
+<script type="text/javascript">
+    const btn=document.getElementById("btn02");
+    //const res=document.getElementById('div4');
+    //也可以获取选择器的方式
+    const res=document.querySelector("#div4");
+    btn.addEventListener('click',function(){
+        //创建对象
+        const xhr=new XMLHttpRequest();
+        //初始化
+        xhr.open('GET','http://127.0.0.1:8000/ie?t='+Date.now());//传一个参数  t=Date.now()（时间戳）
+        // 这样每次请求的时间戳都不一样，浏览器会认为这是两个不同的请求，这样就避开了缓存
+        //发送
+        xhr.send();
+        //事件绑定
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState==4&&xhr.status>=200&&xhr.status<300){
+              //处理服务端返回的结果
+              res.innerHTML=xhr.response;
+
+              //这样在server中修改输出内容，发现更新都是最新的，而不是缓存
+              //但此电脑ie已经不能用了，所以没法亲自实验
+          }
+        }
+    })
+</script>
+</html>

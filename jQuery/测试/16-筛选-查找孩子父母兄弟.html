@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>筛选-查找 父母 孩子 兄弟 标签</title>
+</head>
+
+<body>
+    <div id="div1" class="box" title="one">class为box的div1</div>
+    <div id="div2" class="box">class为box的div2</div>
+    <div id="div3">div3</div>
+    <span class="box">class为box的span</span>
+    <br/>
+    <div>
+        <ul>
+            <span>span文本1</span>
+            <li>AAAAA</li>
+            <li title="hello" class="box2">BBBBB</li>
+            <li class="box" id='cc'>CCCCC</li>
+            <li title="hello">DDDDD<li>
+            <li title="two"><span>span文本2</span></li>
+            <span>span文本3</span>
+        </ul>
+                <span>span文本444</span><br>
+                <li>eeeee</li>
+                <li>EEEEE</li>
+                <br>
+    </div>        
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<!-- 
+在已经匹配出的元素集合中根据选择器查找孩子/父母/兄弟标签
+1. children(): 子标签中找.
+2. find() :后代标签中找
+3. parent() :父标签
+4. prevALl() :前面所有的兄弟标签
+5. nextALl() :后面所有的兄弟标签
+6. siblings() :前后所有的兄弟标签
+ -->
+<script>
+    var $ul=$('ul');
+// 1. ul标签的第2个span子标签  儿子不是孙子
+console.log($ul.children('span:eq(1)').text());
+
+// 2. ul标签的第2个span后代标签  可以是儿子，也可以是孙子
+console.log($ul.find('span:eq(1)').text());
+
+// 3. ul标签的父标签
+console.log($ul.parent().html());//  $ul.parent().parent()可以嵌套
+
+// 4. id为cc的Li标签的前面的所有li标签 
+$('#cc').prevAll('li').css('background','red');
+
+// 5. id为cc的li标签的所有兄弟li标签
+console.log('-------')
+$('#cc').siblings('li').css('color','green');
+
+</script>
+
+</html>

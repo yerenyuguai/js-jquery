@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 
+        1.作为一般函数调用: $(param)
+1).参数为函数:当DOM加裁完成后，执行此回调函数
+2).参数为选择器字符串:查找所有匹配的标签，并将它们封装成jQuery对象
+3).参数为DOM对象: 将dom对象封装成jQuery对象
+4).参数为html标签字符串(用得少): 创建标签对象并封装成jQuery对象
+        2. 作为对象使用: $.xxx()
+1).   $.each() :隐式遍历数组
+2).   $.trim() :去除两端的空格
+     -->
+</head>
+<body>
+    <div>
+        <button id="btn">测试</button><br>
+        <input type="text" name="msg1"><br>
+        <input type="text" name="msg2"><br>
+    </div>
+</body>
+<!-- 
+需求1.点击按钮:显示按钮的文本，显示一个新的输入框
+需求2.遍历输出数组中所有元素值
+需求3.去掉”my world” 两端的空格
+ -->
+ <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+ <script>
+     //绑定文档加载完成后执行 参数为函数:当DOM加裁完成后，执行此回调函数
+     //需求1.点击按钮:显示按钮的文本，显示一个新的输入框
+$(function(){
+    //参数为选择器字符串:查找所有匹配的标签，并将它们封装成jQuery对象
+    $('#btn').click(function(){//绑定事件监听
+        //这里的this 是发生事件的DOM对象(<button>),跟是否使用jQuery没有关系
+           // alert(this.innerHTML);
+           //也可以是
+           alert($(this).html());
+           //参数为DOM对象: 将dom对象封装成jQuery对象
+
+           //显示一个新的输入框
+           //参数为html标签字符串(用得少): 创建标签对象并封装成jQuery对象
+           $('<input type="text" name="msg3"><br>').appendTo('div');//a.appendto('标签'),将a插入到标签中
+    })
+})
+//需求2.遍历输出数组中所有元素值
+var arr=[2,4,5];
+//  $.each()  隐式遍历数组
+$.each(arr,function(index,item){
+    console.log("第"+(index+1)+"个元素，为"+item);
+})
+//需求3.去掉”my world” 两端的空格
+var str="   my world    ";
+//  console.log('--'+str.trim()+'--');//字符串本身就有  字符串.trim()方法
+console.log('--'+$.trim(str)+'--');
+
+ </script>
+</html>

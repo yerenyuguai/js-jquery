@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>过滤选择器</title>
+    <!-- 
+        过滤选择器是在原有选择器匹配的元素中进一步进行过滤的选择器
+     -->
+</head>
+
+<body>
+    <div id="div1" class="box">class为box的div1</div>
+    <div id="div2" class="box">class为box的div2</div>
+    <div id="div3">div3</div>
+    <span class="box">class为box的span</span>
+    <br>
+    <ul>
+        <li>AAAA</li>
+        <li title="hello">BBBBB</1i>
+        <li class="box">CCCC</1i>
+        <li title="hello">DDDD</li>
+        <li title="two">BBBBB</li>
+        <li style="display: none">我本来是隐藏的</li>
+    </u1>
+</body>
+<script src=" https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js">
+</script>
+<script>
+    /*
+    需求:
+    1.选择第一个div
+    2.选择最后一个class为box的元素
+    3.选择所有class属性不为box的div
+    4. 选择第二个和第三个li元素
+    5.选择内容为BBBBB的Li
+    6.选择隐藏的li
+    7.选择有title 属性的Li元素
+    8.选择所有属性title 为hello的Li元素
+    */
+    //1.选择第一个div
+    $('div:first').css('background', 'red');
+    //2.选择最后一个class为box的元素       cccc那行
+    $('.box:last').css('background', 'red');
+    //3.选择所有class属性不为box的div      :not(选择器) 没有class属性也可以
+    $('div:not(.box)').css('background', 'blue');
+    //4. 选择第二个和第三个li元素
+    //  gt(index)  从大于index开始
+    //  lt(index)  到小于index结束   
+    //首先gt（0）选取了大于下标0的li，然后再此基础上对应lt（2），gt（0）之后划分的范围，再进行lt(2),
+    //这样就是gt(0)划分的下标为0 1的元素，就对应着li中第二个和第三个
+    $('li:gt(0):lt(2)').css('background', 'blue');
+    //同样的  $('li:lt(3):gt(0)').css('background', 'blue'); 也是这个思想
+    //这也说明了多个选择器不是同时执行，而是依次执行
+
+    //5.选择内容为BBBBB的Li
+    $('li:contains("BBBBB")').css('color', 'yellow');
+    //6.选择隐藏的li   检查中查看输出
+    console.log($('li:hidden').length,$('li:hidden')[0]);
+    //7.选择有title 属性的Li元素   元素[属性]
+    $('li[title]').css('background', 'purple');
+    //8.选择所有属性title 为hello的Li元素  元素[属性=属性值]
+    $('li[title=hello]').css('width', '60px');//  li[title]=hello 和 li[title]='hello'一样
+</script>
+
+</html>

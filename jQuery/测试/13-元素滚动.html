@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="width: 80px; overflow: scroll;height: 150px;">
+        hello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasure
+        hello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasure
+        hello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasure
+        hello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasure
+        hello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasurehello it is my pleasure
+    </div>
+    <br>
+    <br>
+    <button id="btn1">得到scrollTop</button>
+    <button id="btn2">设置scrollTop</button>
+</body>
+<!-- 
+     1.scrollTop()  读取设置滚动条的y坐标
+     2.   $(document.body).scrollTop()+$(document.documentElement).scrollTop()  
+      读取页面滚动条的y坐标  兼容谷歌和ie
+    3.  $('body,html').scrollTop(60);
+      滚动到指定位置   兼容谷歌和ie
+ -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<script>
+//通过div获取页面滚动条的坐标
+$('#btn1').click(function(){
+    console.log($('div').scrollTop());
+})
+
+//让div或页面的滚动条移动到指定位置
+$('#btn2').click(function(){
+ $('div').scrollTop(600);
+})
+</script>
+</html>

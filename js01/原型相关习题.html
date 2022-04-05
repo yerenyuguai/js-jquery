@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script type="text/javascript">
+    /*测试一
+    */
+    function A() {
+    }
+    A.prototype.n = 1;//向A的原型中添加属性n  A.prototypr指向空Object
+    var b = new A();//实例化一个b，指向a是原型对象，原型对象指向空Object   但是没有m的值，所以为undefined，n为1
+    A.prototype = {
+        n: 2,
+        m: 3
+    }//在堆空间开辟了一个空间，新的Object，里面赋值了m和n，将地址赋值给A.prototype,原来 A.prototypr指向空Object的线断掉了
+    var c = new A();//有创建一个实例，其对应的原型对象指向的是新的Object，值分别为 2 3
+    console.log(b.n, b.m, c.n, c.m);//  1 udndefined 2 3
+
+    /*
+    测试题二
+    */
+    function F() {
+    }
+    Object.prototype.a = function () {
+        console.log('a()')
+    }
+    Function.prototype.b = function () {
+        console.log('b()')
+    }
+    var f = new F();
+    f.a();//本身无，找原型空Object,也没有，就去Object的原型对象  能找到a();
+    //f.b();//undefined  会报错
+    F.a();//a()
+    F.b();//b()
+</script>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>axios 发送AJAX请求</title>
+    <!-- bootcdn  搜素axios，获取标签 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.26.0/axios.min.js"></script>
+</head>
+<body>
+    <button>GET</button>
+    <button>POST</button>
+    <button>AJAX</button>
+</body>
+<script >
+
+    const btns1=document.querySelectorAll('button');
+    //配置 baseURL
+     axios.defaults.baseURL='http://127.0.0.1:8000';
+    btns1[0].onclick=function(){
+        //GET请求
+        axios.get('/axios-server',{
+            //url参数
+            params:{
+                id:100,
+                vip:7
+            },
+            //设置头信息
+            Headers:{
+                age:20,
+                sex:'man'
+            }//不知道为啥不显示。。。。
+        }).then(value=>{
+            console.log(value);
+        })
+    }
+    //post
+    btns1[1].onclick=function(){
+        //POST请求
+        axios.post('/axios-server',
+        {
+            username:'aaaa',
+            password:'123',
+        },{
+            //url参数和请求体同时设置
+            params:{
+                id:200,
+                vip:9
+            },
+            //请求头参数,  不知道那里的原因
+            Headers:{
+                height:180,
+                weight:140
+            }
+        })
+    }
+
+    //通用方法
+    btns1[2].onclick=function(){
+        axios({
+
+            //下面的method url  params headers data都是固定的，不要自己随便起
+            //设置请求方法
+           method:'POST',
+            //url
+            url:'/axios-server',
+            //url参数
+            params:{
+                vip:100,
+                level:30
+            },
+            //头信息参数
+            headers:{
+                a:100,
+                b:100
+            },
+            //请求体参数
+            data:{
+                username:'admin',
+                password:'adnmin'
+            }
+        })
+    }
+</script>
+</html>

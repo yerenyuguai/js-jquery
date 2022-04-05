@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<!-- 
+    方式1:原型链继承
+一.套路
+1.定义父类型构造函数
+2.给父类型的原型添加方法
+3.定义子类型的构造函数
+4.创建父类型的对象赋值给子类型的原型
+5.将子类型原型的构造属性设置为子类型
+6.给子类型原型添加方法
+7.创建子类型的对象:可以调用父类型的方法
+二. 关键
+1. 子类型的原型为父类型的一 个实例对象
+ -->
+<body>
+</body>
+<script type="text/javascript">
+    //js没办法像java extends那样继承
+    //父类型
+    function Supper(){
+        this.supProp='父'
+    }
+    Supper.prototype.showsSupperProp=function(){
+        console.log(this.supProp);
+    }
+    //子类型
+    function Sub(){
+        this.subProp='子'
+    }
+
+    //  ★★★★★★★★★★★    让子类型的原型对象成为父类型的实例（子类型的原型为父类型的一 个实例对象）
+    Sub.prototype=new Supper(); 
+    //让子类型的原型对象的constructor指向子类型
+    Sub.prototype.constructor=Sub;//Sub本身的prototype里原本是有constructor的，但这一句让Sub的prototype
+    //重新定向，不让他指向Supper，所以强行  让sub自己指向构造自己的函数Sub ,但是原型对象的原型Object还是Supper
+    Sub.prototype.showSubProp=function(){
+        console.log(this.subProp);
+    }
+    var sub=new Sub();
+    //   sub.showsSupperProp();  想要子对象实例找调用父元素方法，直接写法是错误的，
+    //父与子现在没有绑定关系     Sub.prototype=new Supper(); 需要这一句
+    //现在可以以使用这个方法了
+    sub.showsSupperProp();
+
+    console.log(sub.constructor);//  constructor用来查找实例对象的构造方法，这是发现已经变成了父类型的构造
+    console.log(sub);
+
+
+    /*
+    方式2:借用构造函数继承(假的)
+一.套路:
+1.定义父类型构造函数20010302
+2.定义子类型构造函数
+3.在子类型构造函数中调用父类型构造
+二.关键:
+1.在子类型构造函数中通用call()调用父类型构造函数
+    */
+function Teacher(name,salary){
+    this.name=name;
+    this.salary=salary;
+}
+function MathTeacher(name,salary,id){
+    Teacher.call(this,name,salary);//相当于this.Teacher(name,salary),  A.call(B) 用B来调用执行A,这里的B是this，this是m
+    //即为  this.name=name;  this.salary=salary;
+    this.id=id;
+}
+var m=new MathTeacher('数学老师一',8000,001);
+console.log(m.name,m.salary,m.id);
+
+
+//发现方式一类里的属性是固定的，有利有弊，有没有办法让两者结合起来呢
+
+/*
+方式3  原型链+借用构造函数的组合继承
+1.利用原型链实现对父类型对象的方法继承
+2.利用super()借用父类型构建函数初始化相同属性
+*/
+
+function Cat(name,age){
+    this.name=name;
+    this.age=age;
+}
+Cat.prototype.setName=function(name){
+    this.name=name
+}
+//方法是所有实例公用的，所以用原型继承；属性是每个对象自身的，用构造函数继承（复制代码）就行
+function BlackCat(name,age,sex){
+    Cat.call(this,name,age);//为了得到属性
+    this.sex=sex
+}
+BlackCat.prototype=new Cat();//为了能看到父类的方法
+BlackCat.prototype.constructor=BlackCat;//修正constructor属性，让其执行自己的构造方法
+BlackCat.setSex=function(sex){
+    this.sex=sex;
+}
+var bc=new BlackCat('咪咪',3,'母');
+bc.setName('喵喵');
+console.log(bc.name,bc.age,bc.sex);
+</script>
+</html>

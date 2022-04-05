@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #div1{
+            width: 200px;
+            height: 200px;
+            border: solid 2px rebeccapurple;
+        }
+    </style>
+    <!-- 实现功能  点击按钮之后，把服务端返回的 响应体结果在div中呈现   页面不刷新 -->
+</head>
+<body>
+    <button id="btn01">点击发送请求</button>
+    <div id="div1"></div>
+</body>
+<script type="text/javascript">
+    //获取btn
+    var btn=document.getElementById("btn01");
+    const result=document.getElementById("div1");
+    btn.onclick=function(){
+        //进行AJAX的操作步骤
+
+        // 1创建对象
+        const xhr=new XMLHttpRequest();
+        // 2做一个初始化  设置请求的方法和url
+        xhr.open('GET','http://127.0.0.1:8000/server');//输入sever里设置的端口
+
+        /*
+        在一个端口后添加参数   
+        http://127.0.0.1:8000/server?   加了一个问号表示分割
+        http://127.0.0.1:8000/server?a=100   a表示参数  100是值
+        http://127.0.0.1:8000/server?a=100&  &表示and  在加一个参数  
+        http://127.0.0.1:8000/server?a=100&b=200   完整的传参
+        xhr.open('GET','http://127.0.0.1:8000/server?a=100&b=200'); 检查里network传参就可以看到
+        */
+
+        // 3 进行发送
+        xhr.send();
+        // 4 事件绑定  处理服务端返回的结果    
+        
+        //on... 当什么时候
+        //readystate 表示状态  0 1 2 3 4  0代表未初始化，1表示open已经调用完毕，2表示send方法调用完毕 
+        //3表示服务端返回了部分的结果    4表示服务端返回了所有的结果
+        //change    改变的时候       当状态改变的时候
+
+        //  所以下面的执行了四次  0~1 1~2 2~3 3~4
+        xhr.onreadystatechange=function(){
+           
+            if(xhr.readyState==4){
+                //说明服务端返回了所有的结果
+                
+                //判断相应状态码  200 404 403 401 500  ,基本2xx都时表示成功
+                if(xhr.status>=200&&xhr.status<300){
+                   //处理服务端返回的结果   行 头 空行 体
+
+                   // 1.相应行
+                //    console.log(xhr.status);//状态码
+                //    console.log(xhr.statusText);//状态字符串
+                //    console.log(xhr.getAllResponseHeaders());//所有的响应头
+                //    console.log(xhr.response);//响应体  hello AJAX
+
+                //设置result的文本
+                result.innerHTML=xhr.response;
+                }
+            }
+        }
+    }
+</script>
+</html>

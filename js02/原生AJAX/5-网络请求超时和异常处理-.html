@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>请求超时和网络异常</title>
+    <!-- 网络异常或者请求超时时可以给用户一个友好的提醒 -->
+    <style>
+        #div5{
+            width: 200px;
+            height: 200px;
+            border: 2px solid slateblue;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="btn03">点我三秒后会显示请求超时，但我设置了两秒就显示超时异常</button>
+    <div id="div5"></div>
+</body>
+<script type="text/javascript">
+    const btn=document.getElementById('btn03');
+    const res=document.getElementById('div5');
+
+    btn.addEventListener('click',function(){
+        const xhr=new XMLHttpRequest();
+
+        //超时设置
+        xhr.timeout=2000; // 这句话用来实现超过两秒的话，请求就取消，在检查中可以发现请求canceled
+        //超时回调
+        xhr.ontimeout=function(){
+            alert('超时，请稍后重试')
+        }
+        //网络异常回调
+        xhr.onerror=function(){
+            alert('网络异常，请稍后重试');
+            //可以在谷歌浏览器中检查中设置网络为离线  offline
+        }
+        xhr.open('GET','http://127.0.0.1:8000/delay');
+        xhr.send();
+        xhr.onreadystatechange=function(){
+            if(xhr.status<300&&xhr.status>=200&&xhr.readyState==4){
+                res.innerHTML=xhr.response;
+            }
+        }
+    })
+</script>
+</html>

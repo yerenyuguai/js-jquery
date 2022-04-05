@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .div{
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        top: 50px;
+        left: 10px;
+        background: red;
+    }
+</style>
+<body>
+    
+</body>
+<!-- 如果两个库都有$,就会出现冲突
+ 解决  jQuery库可以释放$的使用权，让另外的库可以正常使用，此时jQuery库内只能使用jQuery了
+api  jQuery.noConflict() -->
+<script src="myLib.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<!-- 这上面就是引入了两个库 -->
+<script>
+    //我们想让myLib.js的库使用$,但是由于先后顺序，$被引入的jQuery库覆盖了
+    //所以要释放下面库的使用权
+    jQuery.noConflict();
+    //这样就可以调用myLib里的了
+    $();
+    //而想要使用jQuery的功能  就只能用jQuery了
+    jQuery(function(){          //  不能这样  $(function(){
+        console.log('llala');
+    })
+    console.log('--------');//先执行
+    
+
+</script>
+</html>

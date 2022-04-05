@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style id="div">
+        .div{
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            top: 50px;
+            left: 10px;
+            background:blue;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn1">慢慢收缩</button>
+    <button id="btn2">慢慢展开</button>
+    <button id="btn3">收缩展开切换</button>
+    <div class="div"></div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<!-- 
+    滑动动画   
+    slideDown()  带动画的展开
+    slideUp()  带动画的收缩
+    slideToggle()  带动画的切换展开收缩
+
+    主要控制变化的是高度
+ -->
+<script>
+    var $div=$('.div')
+    $("#btn1").click(function(){
+        $div.slideUp()
+    })
+    $("#btn2").click(function(){
+        $div.slideDown(3000);//  参数时间为3s
+    })
+    $("#btn3").click(function(){
+        $div.slideToggle()
+    })
+</script>
+</html>

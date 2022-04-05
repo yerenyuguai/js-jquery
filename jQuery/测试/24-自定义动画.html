@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0px;
+        }
+        .div{
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 50px;
+            left: 300px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn1">逐渐扩大</button>
+    <button id="btn2">移动到指定位置</button>
+    <button id="btn3">移动指定距离</button>
+    <button id="btn4">停止动画</button>
+    <div class="div">
+        喜羊羊，美羊羊，懒羊羊，沸羊羊
+    </div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<!-- 
+    jQuery 动画的本质  在指定时间内不断改变元素样式来实现
+    animate()   自定义动画效果
+    stop()  停止动画
+ -->
+ <!-- 
+     需求:
+         1.逐渐扩大
+1).宽/高都扩为200px
+2).宽先扩为200px，高后扩为20θpx
+         2.移动到指定位置
+1).移动到(500, 100)处
+2). 移动到(100, 20)处
+         3.移动指定的距离
+1).移动距离为(100, 50)
+2).移动距离为(-100， -20)
+         4. 停止动画
+  -->
+<script>
+    var $div=$('div');
+    $('#btn1').click(function(){
+        /*
+        $div.animate({
+            //注意jQuery可以不用加单位， 但是原生必须要加
+            width:200,
+            height:'200px'
+            //默认时间是400ms
+        },2000)//手动控制时间
+        */  
+       //下面是先宽后高  函数链(方法链)调用
+       $div.animate({
+            width:200
+        },2000).animate({height:200},2000)
+    })
+    $('#btn2').click(function(){
+        //移动到(500, 100)处   top 500  left 100
+        //方向向着右下移动
+
+        //$div.animate({top:500},1000).animate({left:100})
+       
+       // $div.animate({top:500,left:100},1000);//沿着右下斜方向
+
+       //实现向左上移动
+       $div.animate({left:100,top:30})
+    })
+    $('#btn3').click(function(){
+        //移动距离 为（100，50）  注意和按钮二区分
+     /*   $div.animate({
+            left:'+=100',
+            top:'+=50'
+        })
+     */
+    //移动距离 为（-100，-20）
+    $div.animate({
+        left:'-=100',
+        top:'-=20'
+    },5000)
+       
+    })
+    $('#btn4').click(function(){
+        $div.stop();
+    })
+//  去看练习里的常见效果的导航动态显示
+</script>
+</html>

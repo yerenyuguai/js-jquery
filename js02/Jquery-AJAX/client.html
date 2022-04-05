@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jquery发送AJax请求</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2 class="page-header">Jquery发送AJax请求</h2>
+        <button class="btn btn-primary">GET</button>
+        <button class="btn btn-danger">POST</button>
+        <button class="btn btn-info">通用性方法AJAX</button>
+    </div>
+</body>
+<script>
+    //  第一个按钮发送get请求
+    $('button').eq(0).click(function(){
+        $.get('http://127.0.0.1:8000/jquery-server',{a:100,b:200},function(data){
+            console.log(data);
+        },'json')//这里添加了第四个参数，响应体类型，json表示响应体是一个json类型的数据，同样的server对应的app.get()修改
+    })
+    // post 按钮发送请求
+    $('button').eq(1).click(function(){
+        $.post('http://127.0.0.1:8000/jquery-server',{a:200,b:300},function(data){
+            console.log(data);
+        })
+    })
+
+    //  通用方法
+    $('button').eq(2).click(function(){
+        $.ajax({
+            //url
+            url:'http://127.0.0.1:8000/jquery-server',
+            //参数
+            data:{a:300,b:400},
+            //请求类型
+            type:'GET',
+
+            //响应体结果 将输出结果变为对象
+            dataType:'json',
+            //成功的回调
+            success:function(data){
+                console.log(data);
+            },
+            //超时的回调
+            timeout:2000,//  可以把路径改为'http://127.0.0.1:8000/delay'
+            //失败的回调
+            error:function(){
+                console.log('出错了！');
+            }
+            
+        })
+    })
+</script>
+</html>

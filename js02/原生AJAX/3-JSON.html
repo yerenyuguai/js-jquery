@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--   向服务端发送请求，服务端大多数返回结果都是JSON格式的数据 -->
+    <!--    实现功能 在窗口按下任意一个按键就会向服务端发送一个请求 -->
+    <style>
+        #div3{
+            width: 100px;
+            height: 100px;
+            border: 2px solid orange;
+        }
+    </style>
+</head>
+<body>
+    <div id="div3"></div>
+</body>
+<script type="text/javascript">
+    //测试中修改前端代码不需要重启端口服务器，但server等修改要重启,安装nodemon插件就不必重启，保存即可
+    const result=document.getElementById("div3");
+    //绑定键盘点击事件
+    window.onkeydown=function(){
+        //发送请求
+        const xhr=new XMLHttpRequest();
+
+        //设置响应体数据的类型， 用来下面的自动转化
+        xhr.responseType="json";
+
+
+        //初始化
+        xhr.open('GET','http://127.0.0.1:8000/JSON-server')
+        //发送
+        xhr.send();
+        //事件绑定
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState==4&&xhr.status>=200&&xhr.status<300){
+              //处理服务端返回的结果
+              //     result.innerHTML=xhr.response;  这样返回的话 是JSON的字符串
+              //我们可以手动设置将数据转化为对象
+              //   let data=JSON.parse(xhr.response);
+              //      result.innerHTML=data.name;
+              //但是也有自动转换的方法  在上面
+            console.log(xhr.response);
+            result.innerHTML=xhr.response.name;
+          }
+        }
+    }
+</script>
+</html>

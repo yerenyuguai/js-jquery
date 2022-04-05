@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    用户名<input type="text" id="username">
+    <button id="btn01">确定(原生版本)</button>
+    <button id="btn02">确定(jQuery版本)</button>
+</body>
+<script>
+    //使用原生的DOM
+    window.onload = function () {
+        var btn = document.getElementById('btn01');
+        btn.onclick = function () {
+            var name = document.getElementById('username').value;
+            alert(name);
+        }
+    }
+</script>
+<script  type="text/javascript"    src="../node_modules/jquery/dist/jquery.js">
+    //下载的jQuery在这个路径里  
+    // npm init - y       npm i jquery -S
+    //或者不必下载到本地文件，去bootcdn引入标签，保证开发环境要有网（远程引入，减轻本地服务器压力）
+</script>
+<script>
+    //使用jQuery实现
+
+    //绑定文档加载完成的监听  类似于window.onload=。。。   
+    $(function(){
+        $('#btn02').click(function(){//给btn02绑定监听   $('#id')  获取对象
+            var username=$('#username').val();//  val()  等价于value  
+            alert(username);
+        })
+    })
+
+     //使用jQuery核心函数  $() /  jQuery()   即 $(function(){  等价于   jQuery(function(){
+    //使用jQuery核心对象   执行$()返回的对象 
+    /*
+     jQuery(function(){
+        var $btn2=$('#btn02') //  为了表明$btn2  是个jQuery对象，所以加了个前缀$
+        $btn2.click(function(){  
+            var username=$('#username').val();//  val()  等价于value  
+            alert(username);
+        })
+    })
+    */
+</script>
+</html>

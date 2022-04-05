@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 
+1. H5规范提供了js分线程的实现， 取名为: Web Workers
+2.相关API
+* Worker: 构造函数，加载分线程执行的js文件
+* Worker.prototype.onmessage: 用于接收另一个线程的回调函数
+Worker. prototype. postMessage:向另一个线程发送消息
+3.不足
+* worker内代码不能操作DOM(更新UI)
+不能跨域加载JS
+不是每个浏览器都支持这个新特性
+     -->
+</head>
+<body>
+    <input type="text" placeholder="数值" id="number">
+<button id="btn">计算</button>    
+</body>
+<script type="text/javascript">
+    //斐波那契数列    f(n)=f（n-1）+f(n-2)
+    // 1 1 2 3 5 8....
+    // function fibonacci(n){
+    //     return n<=2?1:fibonacci(n-1)+fibonacci(n-2);//三目运算符，n<=2的话就为1，否则，满足f(n)=f（n-1）+f(n-2)
+    // }
+    // //console.log(fibonacci(6)); //第六位是8
+    // var inp=document.getElementById('number');
+    // document.getElementById('btn').onclick=function(){
+    //     var number=inp.value
+    //     var result=fibonacci(number);
+    //     alert(result);
+    // }
+    //发现上面的代码效率很低，从40位之后明显感到了要计算好久才出结果
+    //上面用了递归，效率低
+
+    //所以就可以用到Web Workers，它是H5为我们提供js的多线程解决方案
+    //我们可以将一些 大计算量的代码交由web worker运行而不冻用户界面(即用户不能操作界面)
+    //但是子线程完全受主线程控制，且不的操作DOM，所以这个新标准并没有改变js单线程的本质
+   
+   
+   
+   
+    /*
+创建个Worker对象并向它传递将在新线程中执行的脚本的URL
+var worker = new Worker("worker.js");
+//接收worker传过来的数据函数
+worker.onmessage = function (event) {
+console.log(event.data); 
+//向worker发送数据
+worker.postMessage("hello world");
+    */
+
+
+
+/*
+    var inp=document.getElementById('number');
+  document.getElementById('btn').onclick=function(){
+    var number=inp.value;
+    //创建一个Worker对象
+    var worker=new Worker('worker.js')
+
+    //绑定接收消息的监听
+    worker.onmessage=function(event){
+        console.log('主线程接收分线程返回的数据；'+event.data);
+        alert(event.data)
+    }
+    //向分线程发送消息
+    worker.postMessage(number)
+    console.log('主线程向分线程发送的数据；'+number);
+  }
+
+
+  */
+//貌似谷歌现在不支持了
+</script>
+</html>

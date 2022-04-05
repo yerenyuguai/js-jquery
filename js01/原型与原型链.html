@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    原型与原型链
+</body>
+<!--   1 函数的prototype属性  
+    每个函数都有一个prototype属性，即显式原型属性 
+    它默认指向一个Object空对象（即为；原型对象  Fun.prototype），没有我们添加的属性
+    原型对象中有一个属性constructor 它指向函数对象
+       2  给原型对象添加属性（一般都是方法）
+    作用：函数的所有实例对象自动拥有原型中的属性（方法） 
+-->
+<script type="text/javascript">
+console.log(Date.prototype,typeof Date.prototype);
+function Fun(){};//默认指向一个Object空对象(没有我们添加的属性)
+
+console.log(Fun.prototype);//这时候也有test()，这个是会输出添加完之后最新的结果
+Fun.prototype.test=function(){
+    console.log('test()');
+}//手动添加一个属性
+console.log(Fun.prototype);//和上面一样
+// 原型对象中有一个属性constructor 它指向函数对象
+console.log(Date.prototype.constructor==Date);//通过原型对象找指向我自己的属性
+console.log(Fun.prototype.constructor==Fun);//同样自己构造的函数也可以通过原型对象的属性找到自己
+
+/*  假如函数名字叫type ，有一个属性叫protoype,而prototype所指向的值就是type的原型对象，而原型对象中有一个属性
+     叫constructor,它指向的值就是type
+*/
+//  Fun.prototype.test()没意义
+
+// 一般都是给原型对象中添加属性(一般是方法)===》实例对象可以使用
+Fun.prototype.test=function(){
+    console.log('test()');                     //多个进行重命名  选中要修改的词   crtl+F2
+}//手动添加一个属性
+//创建一个实例   
+var f=new Fun();
+f.test();//实例可以调用原型对象里的方法
+
+
+
+/* 
+1  显式原型    每个函数都有一个prototype属性，即显式原型属性 
+2   每个实例对象都有一个__proto__，可以称之为隐式原型
+3   对象的隐式原型的值为其对应构造函数的显式原型的值
+ 
+总结   
+    函数的prototype属性：在定义函数时自动添加的，默认值是一个空Object对象
+    对象的__proto__属性： 创建对象时自动添加的，默认值为构造函数的prototype属性值
+    程序员能直接操作显式原型，但不能直接操作隐式原型（ES6之前）
+*/
+function Fn(){
+}
+//每个函数都有一个prototype属性，即显式原型属性 
+console.log(Fn.prototype);
+
+//每个实例对象都有一个__proto__，可以称之为隐式原型
+var f1=new Fn();//内部js引擎语句  this.__proto__=Fn.prototype
+console.log(f1.__proto__);
+//实例化对象对象的隐式原型的值为其对应构造函数的显式原型的值 ★★★★★
+console.log(f1.__proto__===Fn.prototype);//true     ===判断是否全等  ，==判断是否值相等
+//prototype和__proto__都是指向了地址值，指向了原型对象
+
+//给原型对象添加方法
+Fn.prototype.test=function(){
+    console.log("test()");
+}
+//通过实例对象调用实例对象的方法，没找到去原型对象的原型
+f1.test();
+
+/*
+ 1.原型链
+*访问一个对象的属性时,
+*先在自身属性中查找，找到返回
+如果没有，再沿着_ proto_ 这条链向上查找， 找到返回
+如果最终没找到，返@undefined
+   别名:隐式原型链
+*   作用:查找对象的属性(方法)
+2.  构造函数/原型/实体对象的关系(图解)
+3.  构造函数/ 原型/实体对象的关系2(图解)
+*/
+function Fn1(){
+    this.test1=function(){
+        console.log('test1()');
+    }
+}
+Fn1.prototype.test2=function(){
+    console.log('test2()');
+}
+var fn1=new Fn1();
+fn1.test1();
+fn1.test2;
+console.log(fn1.toString());
+//  fn1.test3();搜索不到 is not undefined
+
+
+/*
+定义一个Fn函数，Fn函数名在栈空间里，保存的地址值0x123指向了在堆空间对应的Fn的函数对象(右边的地址0x123先生成，再赋值给Fn函数)
+ 在Fn函数对象里，有一个prototype属性 ，保存的地址值0x234指向了同样在栈空间的Object空对象（默认，没有我们创建的方法）
+
+ 
+ js中默认定义了一个Object也有保存地址值，假设为0x456，这个地址值指向了Object指向Object函数对象，
+ 在Object函数对象里，也有一个prototype属性，保存的地址是0x345,指向了Object的原型对象，
+ Object.prototype指向了的是Object的原型对象，常见的toString(),hasownProperty()等方法都保存于此
+ 其实Object的原型对象还有一个隐式属性__proto__,他的值为null
+ 即Object.prototype.__proto__==null，这就说明实例方法在调用方法是如果自身没有就去Object空对象里找，
+ 如果还没有就去Object原型对象里找，如果还没有就找不到
+ 这个是在加载页面的时候，就把这些内置的代码加载起来，在执行我们的代码
+ 所以就解释了Fn的实例化对象为啥可以使用toString()等方法
+
+ 所以在Object空对象，有一个__proto__属性,保存的地址值0x345指向了Object的原型对象，有上面的0x345，才有这个
+ 而Fn新添加的方法就可以加入到这个Object空对象里
+
+ 创建一个f1作为实例化对象，保存的地址值指向在堆空间里创建地址为0x567的Fn的实例对象，
+ 这里有__proto__属性，它所执指向的是0x234,即为Object空对象
+ 同时也有Fn内部的方法保存在实例化对象中，新添加的通过prototype的是在Object空对象里，如Fn.prototype.test2()
+ 
+*/
+console.log(Object.prototype==fn1.__proto__.__proto__)//fn1是上面的实例化对象 ，Object可以理解为对象之源头
+//Object.prototype指向了的是Object的原型对象，常见的toString(),hasownProperty()等方法都保存于此
+
+
+//实例对象的隐式原型等于构造函数的显式原型，Function=new Function();
+//可以看出当把函数当成对象的时候，函数也有__proto__属性，并且生成它的函数就是Function，
+//那么Function自己呢，因为Function本身也是函数，函数是由Function生成的
+console.log(Function.prototype==Function.__proto__);//true
+//Object函数也是一个函数对象，也是由Function生成的，那么看下例
+console.log(Object.__proto__==Function.prototype);
+//所有的函数都是基于window下产生的第一个Function对象的原型对象，也包括Object这个对象
+//说明所有函数的__proto__都是一样的
+
+
+// 函数的显式原型指向的对象默认是空Object实例对象(但Object不满足)
+console.log("`````````````````");
+var fn=new Fn();
+//Fn.prototype含有__proto__与constructor两个属性，__proto__属性指向Object.prototype，
+//那么一般函数的prototype是由Object函数生成的。
+console.log(Fn.prototype.__proto__ === Object.prototype );//true
+console.log(Fn.prototype.constructor ===Fn)//true
+console.log(Object.prototype instanceof Object);//False
+
+
+//一般而言，一个"function"类型的对象，应该是由Function函数生成的，
+//也就是Function.prototype.__proto__ === Function.prototype才对，
+//如果是这样的话，也就出现了跟Object一样的问题，一直循环利用，没有尽头。
+//所以Javascript规定，Function.prototype.__proto__ === Object.prototype,  
+//                   Object.prototype.__proto__ === null，        是原型链有终点。也就是在原型链的终点处有2个特殊情况。
+// Object的原型对象 和Function.prototype.__proto__  是原型链的尽头
+console.log(Function.prototype.__proto__==Object.prototype);//true
+console.log(Object.prototype.__proto__ === null);//true
+
+
+/*    这四句话一定要记住  ★ ★ ★ ★ ★ ★ ★ ★
+javascript中一切皆对象，函数也属于对象。
+所有对象都含有__proto__。
+只有函数才有prototype。
+所有函数的默认原型都是Object的实例
+
+
+var o = {};
+    o.__proto__ === Object.prototype  //true
+    o instanceof Object      //true
+    o instanceof Function    //false
+    
+    var o = Object();
+    o.__proto__ === Object.prototype  //true
+    o instanceof Object      //true
+    o instanceof Function    //false
+    
+    var o = new Object();
+    o.__proto__ === Object.prototype  //true
+    o instanceof Object      //true
+    o instanceof Function    //false
+    
+    function Fn(){}
+    var fn = new Fn();
+    fn.__proto__ === Fn.prototype;
+    
+    fn instanceof Fn        //true
+    fn instanceof Object    //true
+    fn instanceof Function  //false
+
+
+
+函数含有__proto__与prototype属性，__proto__指向Function.prototype,          prototype指向Object.prototype
+
+
+接下来有实例
+ function fn(){}
+ var o = {}
+ var o1 = new Object();
+ 
+ typeof fn     //"function"
+ typeof fn.prototype   //"object"
+ typeof fn.__proto__   //"function"  
+ fn.prototype.__proto__ === Object.prototype  //true   所有函数的默认原型都是Object的实例
+ fn.__proto__ === Function.prototype          //true   所有函数都是Function生成的
+ 
+ fn instanceof Function  //true  fn是Function的实例
+ fn instanceof Object    //true  fn也是Object的实例
+
+ 
+ typeof o  //"object"
+ typeof o.prototype  // "undefined"  因为只有函数才有prototype
+ typeof o.__proto__  // "object"
+ o.__proto__.__proto__ === null   //true
+ 
+ o instanceof Object   // true o是Object的实例
+
+*/
+
+
+/*
+读取对象的属性值：会自动到原型链中查找
+设置对象的属性值：不会查找原型链，如果当前对象中没有此属性，直接添加此属性并设置值
+方法一般定义在原型中，属性一般通过构造函数定义在对象本身上
+*/
+function fu(){
+
+}
+fu.prototype.a="xxx";//添加一个属性
+var f1=new fu();
+console.log(f1.a);
+
+function Person(name,age){
+    this.name=name;
+    this.age=age;
+}
+Person.prototype.setName=function(name){
+    this.name=name;
+}
+var p1=new Person("tom",13);
+p1.setName('Bob');
+console.log(p1);
+var p2=new Person("Jerry",12);
+//属性在对象自身身上，方法在原型上面
+console.log(p1.__proto__==p2.__proto__);//true 是同一个原型上的方法
+
+
+
+
+/*
+1   instanceof  是如何判断的
+表达式 A instanceof B   如果B函数的显式原型对象在A对象的原型链上，返回true，否则返回false
+2  Function是通过new自己产生的实例
+*/
+function Foo(){
+}
+var f1=new Foo();
+console.log(f1 instanceof Foo);//true
+console.log(f1 instanceof Object);//true
+
+
+//  Object()   == var object  == new Function
+console.log(Object instanceof Function);//true
+console.log(Object instanceof Object);//true
+console.log(Function instanceof Function);//true
+console.log(Function instanceof Object);//true
+function Foo(){}
+console.log(Object instanceof Foo);//false
+</script>
+</html>

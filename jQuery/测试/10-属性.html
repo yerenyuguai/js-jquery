@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="div1" class="box" title="one">class为box的div1</div>
+    <div id="div2" class="box" title="two">class为box的div2</div>
+    <div id="div3">div3</div>
+    <span class="box">class为box的span</span>
+        <br/>
+        <ul>
+        <li>AAAA</li>
+            <li title="hello" class="box2">BBBB</li>
+            <li class="box">CCCC</li>
+            <li title="hello">DDDDD</li>
+            <li title="two"><span>BBBB</span></li>
+        </ul>
+        <input type="text" name="username" value="hhClass"/>
+        <br>
+        <input type="checkbox">
+        <input type="checkbox">
+        <br>
+        <button>选中</button>
+        <button>不选中</button>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<script>
+    /*
+    需求:
+1.读取第一个div的title属性
+2.给所有的div设置name属性(value为hhh)
+3.移除所有div的title属性
+4.給所有的div设置cLass='hhhha'
+5.给所有的div添加class='abc'
+6.移除所有div的hhClass 的class
+7.得到最后一个li的标签体文本
+8.设置第一个li的标签体为"<h1 >mmmmmmm</1>”
+9.得到输入框中的value 值
+10.将输入框的值设置为guaizi
+11.点击'全选'按钮实现全选
+12.点击'全不选'按钮实现全不选
+    */
+
+//需求一  1.读取第一个div的title属性
+//   console.log($('div:first').attr('title'));
+
+//2.给所有的div设置name属性(value为hhh),这里其实没有设置name属性的也会给添加上
+//$('div').attr('name','hhh');
+
+//3.移除所有div的title属性
+//$('div').removeAttr('title');
+
+//4.給所有的div设置cLass='hhhha'
+//$('div').attr('class','hhhha');
+
+//5.给所有的div添加class='abc'   注意要区分，上面的是覆盖，这个是在原来的基础上添加
+$('div').addClass('abc');
+
+//6.移除所有div的hhhha的class
+//$('div').removeClass('hhhha');   和4相反
+
+//7.得到最后一个li的标签体文本  不是文本内容是li下整个标签和文本内容
+console.log($('li:last').html());
+
+//8.设置第一个li的标签体为"<h1 >mmmmmmm</1>”
+$('li:first').html('<h1 >mmmmmmm</1>')
+
+//9.得到输入框中的value 值      varl()是jQuery对象获取value的方法
+//  $(':text').val()
+
+// 10.将输入框的值设置为guaizi
+$(':text').val('guaizi');//设置，同时读写也是这个方法 9   ,读写合一
+
+//11.点击'全选'按钮实现全选
+var $checkboxs=$(':checkbox')
+$('button:first').click(function(){
+    $checkboxs.prop('checked',true);//  prop()  property      attr() attribute
+})
+//12.点击'全不选'按钮实现全不选
+var $checkboxs=$(':checkbox')
+$('button:last').click(function(){
+    $checkboxs.prop('checked',false);
+})
+
+//  attr()   专门操作属性值为非布尔值的属性
+// prop()  专门操作属性值布尔值的属性，比如这里的是否选中，true or false  ★★★
+</script>
+</html>

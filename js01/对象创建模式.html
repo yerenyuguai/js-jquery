@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 
+        不同场景用不同模式
+        方式一  Object构造函数模式
+    套路 ：先创建空Object对象，再动态添加属性/方法
+    使用场景：起始时不确定对象内部数据
+    缺点：语句太多 
+         方式二   对象字面量模式
+    套路：使用{}创建对象，同时指定属性/方法
+    适用场景:起始时对象内部数据是确定的
+    问题：创建多个对象，会存在重复代码    
+         方式三   工厂模式
+    套路：通过工厂函数动态创建对象并返回
+    适用场景：需要创建多个对象
+    问题：对象没有一个具体的类型，都是Object类型
+         方式四   自定义构造函数模式
+    套路：子定义构造函数，通过new创建对象
+    适用场景：需要创建多个类型确定的对象
+    问题：每个对象都有相同的数据，浪费内存
+-->
+</head>
+<body>
+</body>
+<script type="text/javascript">
+//方式一  Object构造函数模式  起始时不确定对象内部数据,不确定属性名，不确定属性值 
+var p=new Object();
+p.name="拐子";
+p.age=20;
+p.setName=function(name){
+    this.name=name;
+}
+p.setName("野浩");
+console.log(p.name+p.age);
+//缺点就是语句太多
+
+//方式二  对象字面量模式   起始时对象内部数据是确定的
+var p={
+    name:'tom',
+    age:12,
+    setAge:function(age){
+        this.age=age
+    }
+}
+console.log(p.name);
+p.setAge(100);
+console.log(p.age);
+
+//方式三   工厂模式  适合需要创建多个对象
+function createPerson(name,age){//返回一个对象的函数都可以称之为  工厂函数
+    var obj={
+        name:name,
+        age:age,
+        setName1:function(name){
+            this.name=name;
+        }
+    }
+    return obj;
+}
+var p1=createPerson("野浩",20);
+var p2=createPerson("洪少",22);
+function createStudent(name,garde){
+    var obj={
+        name:name,
+        garde:garde
+    }
+    return obj;
+}
+var s=createStudent("苍蝇",21);
+//上面的方法没有具体的类型，都是Object
+
+//方式四 自定义构造函数模式    适用场景：需要创建多个类型确定的对象
+//定义类型
+
+function Dog(name,age){
+    this.name=name;
+    this.age=age;
+    this.setName2=function(name){
+        this.name=name;//  问题：每个对象都有相同的数据 (方法)，浪费内存 
+    }
+}
+//创建实例
+var d1=new Dog('拐子',20);
+d1.setName2('送财童子');
+console.log(d1.name,d1.age);
+
+//所以只在构造函数中初始化一般属性,将方法放入到原型对象中去 这个方法
+function Dog2(name,age){
+    this.name=name;
+    this.age=age;
+}
+Dog2.prototype.setAge1=function(age){
+    this.age=age;
+}
+var d2=new Dog2('野浩',20);
+d2.setAge1(22);
+console.log(d2.name,d2.age);
+</script>
+</html>

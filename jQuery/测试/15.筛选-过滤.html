@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul>
+        <li>aaaaa</li>
+        <li title="hello" class="box2">bbbbb</li>
+        <li class="box">ccccc</li>
+        <li title="hello">ddddd</li>
+        <li title="two"><span>BBBBB</span></li>
+    </ul>
+    <li>eeeee</li>
+    <li>EEEEE</li>
+    <br>
+</body>
+<!-- 
+      jQuery对象中的元素对象数组中过滤出一部分元素来
+      1，first（）
+      2  last()
+      3  eq(index/-index)
+      4  filter(selector)  filter('[属性=属性值]')
+      5  not(selector)
+      5  has(selector)
+ -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<script>
+    //需求1  ul下第一个li标签
+    console.log($('ul>li:first').html());
+
+    //需求2  ul下最后一个li标签
+    var $lis=$('ul>li'); // 过滤的思想在这里 ★★★★★ 过滤留下了ul中li的标签，之后再按照需求寻找
+    $lis.last().css('background','red');
+
+    //需求3  ul下第二个li标签
+    $lis.eq(1).css('background','green');
+
+    //需求4  ul下li标签中title属性为hello的
+    $lis.filter('[title=hello]').css('font-size','20px')
+
+    //需求5  ul下li标签中title属性  不为 hello的
+    console.log($lis.not('[title=hello]').html());//文本内容也包含html标签
+    
+    //需求6  ul标签下含有span的子标签
+    console.log($lis.has('span').text());//文本内容 
+</script>
+</html>

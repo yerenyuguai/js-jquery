@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style id="div">
+        .div{
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            top: 50px;
+            left: 10px;
+            background:green;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn1">慢慢显示</button>
+    <button id="btn2">瞬间显示</button>
+    <button id="btn3">慢慢隐藏</button>
+    <button id="btn4">显示隐藏切换</button>
+    <div class="div"></div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<!-- 
+    显示隐藏  ：默认没有动画
+    show()  不带动画的显示,传参就会带动画
+    hide()  不带动画的隐藏
+    toggle()  不带动画的的切换显示/隐藏
+
+    改变的是高度宽度和透明度，位置是左上角
+ -->
+<script>
+var $div=$('.div')
+$('#btn1').click(function(){
+    $div.show(3000);
+})
+$('#btn2').click(function(){
+    $div.show();//传参控制时间，不传参就是瞬间
+})
+$('#btn3').click(function(){
+    $div.hide(3000);
+})
+$('#btn4').click(function(){
+    $div.toggle();
+})
+</script>
+</html>

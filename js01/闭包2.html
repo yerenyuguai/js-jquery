@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- 
+        闭包的应用      定义js模块
+        具有特定功能的js文件
+        将所有的数据和功能都封装到一个函数内部（私有）
+        只向外暴露一个包含n个方法的对象或函数
+        模块的使用者，只需要通过模块暴露的对调用方法来实现对应的功能
+     -->
+</head>
+
+<body>
+</body>
+<script type="text/javascript" src="myModule.js">
+</script>
+<!-- 上面的script标签引入了js文件，所以不能再进行编写，重新写一个新的 -->
+<script type="text/javascript">
+  var module = myMdoule();//定义一个接受值
+  module.doSomething();
+  module.doOtherthing();
+</script>
+<script type="text/javascript" src="myModule1.js"></script>
+<script type="text/javascript">
+  console.log('----------------------')
+  // 更推荐这个，而上个必须要执行函数var module=myMdoule();才可以    ★★★★
+  myMdoule1.doOtherthing();
+  myMdoule1.doSomething();
+
+  /*
+  1 闭包的缺点  
+    函数执行完后，函数内的局部变量没有释放，占用内存时间会变长，容易造成内存泄漏
+    内存泄漏 （本来有一定量可以使用的内存，但由于内存泄漏，可使用的内存变少了）--
+  2 解决办法
+  能不用闭包就不用    及时释放
+  */
+  function fn1() {
+    var arr = new Array(100000)           //10w个长度的数组，长度非常大
+    function fn2() {
+      console.log(arr.length);
+    }
+    return fn2;
+  }
+  var f = fn1();
+  f();
+  f=null;//让内部函数成为垃圾对象，从而去回收闭包对象
+
+  /*
+1 内存溢出  
+一种程序运行出现的错误
+当程序运行需要的内存超过了剩余的内存，就会抛出内存溢出的错误
+2 内存泄漏   （本来有一定量可以使用的内存，但由于内存泄漏，可使用的内存变少了）
+占用的内存没有及时释放
+内存泄漏累计多了就容易导致内存溢出
+  常见的内存泄漏:
+  意外的全局变量
+  没有及时清理的计时器或回调函数 
+  闭包
+  */
+
+  // 1.内存溢出
+  // var obj={}
+  // for(var i=0;i<100;i++){
+  //  obj[i] =new Array(1000000);   // obj[i] 伪数组
+  // }
+
+  //意外的全局变量
+   function f2(){
+      a=3
+     console.log(a);
+   }
+   f2();//  这里的a是全局变量，f()运行完之后应该释放，如果是var a;就可以了
+
+  //没有及时清理计时器
+  var time=setInterval(function(){
+    console.log('-------');
+  },1000);
+  //需要清理
+  clearTimeout(time);
+
+  //闭包
+  function fnn(){
+    var a=4;
+    function fnn1(){
+      console.log(++a);
+    }
+    return fnn1;
+  }
+  var ff=fnn();
+  ff();
+  ff=null;////让内部函数成为垃圾对象，从而去回收闭包对象
+
+
+  //面试题一  没有闭包
+  var name='The Window';
+  var object={
+    name:'My Object',
+    getNameFunc:function(){
+      return function(){
+        return this.name;
+      };
+    }
+  };
+  console.log(object.getNameFunc()());//object.getNameFunc()得到一个函数,之后函数()，return this.name; this就是window
+  //面试题二  有闭包  内部函数引用外部变量
+  var name1='The Window';
+  var object1={
+    name1:'My Object',
+    getNameFunc:function(){
+      var that=this;//将调用getNameFunc的this赋值给that
+      //★★★★★★★★★★★★上面的很常用
+      return function(){
+        return that.name1;
+      };
+    }
+  };
+  console.log(object1.getNameFunc()());
+
+
+  //面试题三   ★★★★★★  建议debug
+  function fun(n,o){
+    console.log(o);//输出第二个参数
+    return {
+      fun:function(m){// a.fun(m);
+        return fun(m,n);//发现:function(m)里面return(m,n)  在返回到function fun(n,o)这个方法，发现与m无关，n传给o
+      }
+    }
+  }
+  //调用外部函数才能产生新的闭包
+  var a=fun(0);
+  a.fun(1);//等价于fun(0).fun(1),所以输出o后 return后，再执行 fun:function(m){}
+  a.fun(2);
+  a.fun(3);
+  //  undefined ,0,0,0  这里的m利用不到，直接输出console.log(o);
+  
+  var b=fun(0).fun(1).fun(2).fun(3);
+  //  undefined，0，1，2
+
+  //  首先fun(0),0赋值给n,o为undefined，然后输出o,紧接着进入return，,因为是fun(0)，所以m为0，n为之前传递的0，
+  //所以再回到fun(n,o)，o就对应n的0
+  //，然后接着到fun(1), n为1，o为0，输出o,然后进入return,因为是fun(1)，所以m为1，n为之前传递的1，
+  //所以再回到fun(n,o)，o就对应n的1
+  //  接着到fun(2),所以n赋值为2，0为刚才n传的1，然后输出1，然后进入return，因为是fun(2)，所以m为2，n之前赋值的2
+  //，o就对应n的2
+  //接着到fun(3),所以n赋值为3，0为刚才n传的2，然后输出2，然后进入return，因为是fun(3)，所以m为3，n之前赋值的3
+  //之后就没有调用了，m.n就没有用了
+
+  var c=fun(0).fun(1);  c.fun(2);  c.fun(3);
+ //   undefined，0，1，1
+
+// c=fun(0).fun(1);  n为1，o为0  
+//紧接着c.fun(2);  n为2, o直接是接着上次n赋值给o，为1  ，然后输出1，
+//因为是fun(2)，所以m为2，n为之前传递的2，  因为不是连续调用所以没办法让fun(3)的o为n的值2，还是按照这个 c=fun(0).fun(1)
+</script>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>固定的回到顶部 </title>
+    <!--    用到测试里的  第十三个元素滚动 -->
+    <style>
+        #to_top{
+            width: 30px;
+            height: 40px;
+            font: 14px/20px arial;
+            text-align: center;
+            background: red;
+            position: fixed;
+            cursor: pointer;
+            color: blue;
+            left: 1450px;
+            top: 600px;
+        }
+    </style>
+</head>
+<body style="height: 5000px;">
+    <div id="to_top">回到顶部</div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<script>
+$('#to_top').click(function(){
+    //瞬间回到顶部
+    //  $('html,body').scrollTop(0);
+
+    //平滑滚动到顶部
+    // 需要获取总时间和总距离和间隔时间
+    var $page=$('html,body');
+      var instance= $page.scrollTop();//总距离
+      var time=500;//总时间  单位ms
+      var intervaltime=50;//间隔时间  单位ms
+
+      // 算出每一次移动的距离      time/intervaltime 移动次数
+      var itemdistance=instance/(time/intervaltime);
+    //使用循环定时器不断滚动
+          var time=setInterval(function(){
+              instance-=itemdistance;//每次减少这么多距离
+              $page.scrollTop(instance);
+              if(instance<=0){
+                  instance=0;//修正
+                  //停止计时器
+                  clearInterval(time);
+              }
+          },intervaltime)
+    //到达顶部停止计时器
+})
+</script>
+</html>

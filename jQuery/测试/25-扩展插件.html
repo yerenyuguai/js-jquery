@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0px;
+        }
+        .div{
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            top: 50px;
+            left: 50px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <input type="checkbox" name="items" value="足球"/>足球
+    <input type="checkbox" name="items" value="篮球"/>篮球
+    <input type="checkbox" name="items" value="乒乓"/>乒乓
+    <input type="checkbox" name="items" value="羽毛球"/>羽毛球
+    <br>
+    <input type="button" id="checkedAllBtn" value="全选">全选
+    <input type="button" id="checkedNoBtn" value="全不选">全不选
+    <input type="button" id="reverseCheckedBtn" value="反选">反选
+</body>
+<!-- 
+    扩展jQuery的工具方法
+    $.extned(object)
+    扩展jQuery对象的方法
+    $.fn.extend(object)
+ -->
+ <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+ <script src="my_jQuery-plugin.js"></script>
+ <!-- 注意上面两个的先后顺序，有jQuery库才能有插件 -->
+ <script>
+     console.log($.min(3,5));//用了扩展的方法
+     console.log('---'+$.leftTrim('    sdas'));
+
+     var $items=$(':checkbox[name=items]')
+     $('#checkedAllBtn').click(function(){
+         $items.checkAll();
+     })
+     $('#checkedNoBtn').click(function(){
+         $items.uncheckAll();
+     })
+     $('#reverseCheckedBtn').click(function(){
+         $items.reservecheck();
+     })
+ </script>
+</html>

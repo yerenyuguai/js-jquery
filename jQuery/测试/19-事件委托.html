@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul>
+        <li>11</li>
+        <li>11111</li>
+        <li>11111111</li>
+        <li>11111111111</li>
+    </ul>
+    <li>222222</li>
+    <br>
+    <button id="btn">添加新的li</button>
+    <br>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<!-- 
+    绑定事件监听的问题:新加的元素没有监听 
+ -->
+<script>
+//  需求一  点击li背景变为红色
+$('ul>li').click(function(){
+    this.style.background='red';
+})
+//  需求二  点击btn旧添加一个li
+$('#btn').click(function(){
+    $('ul').append('<li>新增的li</li>')
+})
+</script>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>取消请求</title>
+    <!-- 请求中过程当中，即为在结果还没回来之前，我们可以手动通过代码来取消这个请求 -->
+</head>
+<body>
+    <button>点击发送</button> 
+    <button>点击取消</button>
+</body>
+<script type="text/javascript">
+// 获取按钮元素对象
+const btns=document.querySelectorAll('button');
+
+let x=new XMLHttpRequest();//不能用const了，const表示不能变更的数
+//如果用户频繁点击的话，服务器就会接受多个同样的请求，负担大大增加
+//所以需要判断请求是否之前发送过
+
+//标识变量
+let isSending=false;//是否发送，默认为false
+
+btns[0].onclick=function(){
+    //修改标识变量 
+    if(isSending){
+        //如果正在发送，则取消该请求，创建一个新请求
+        x.abort();
+    }
+    isSending=true;
+    x.open('GET','http://127.0.0.1:8000/delay');
+    x.send();
+    x.onreadystatechange=function(){
+        if(x.readyState==4){
+            //表示请求完成
+            //修改变量
+            isSending=false;
+        }
+    }
+}
+//取消请求       检查网络里status状态显示为200时表示请求完成，这时候取消不了了
+  //  abort
+  btns[1].onclick=function(){
+      x.abort();
+  }
+</script>
+</html>

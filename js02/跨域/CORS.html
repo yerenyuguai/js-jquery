@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置CORS响应头实现跨越</title>
+    <!-- 
+1)_ CORS是什么?
+CORS ( Cross-Origin Resource Sharing) ,跨域资源共享。CORS是官方的跨域解决方
+案，它的特点是不需要在客户端做任何特殊的操作，完全在服务器中进行处理，支持
+get和post请求。跨域资源共享标准新增了一组HTTP首部字段，允许服务器声明哪些
+源站通过浏览器有权限访问哪些资源
+2) CoRS怎么工作的?
+CORS是通过设置一-个响应头来告诉浏览器，该请求允许跨域，浏览器收到该响应
+以后就会对响应放行。
+3) CORS 的使用
+主要是服务器端的设置:
+router.gt("/testAJAX" , function (reg , res) { -->
+
+    <!--     可以查看这个网址来了解CROS
+        htts://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access control CORS 
+    -->
+</head>
+<style>
+    #div2{
+        width: 200px;
+        height: 200px;
+        border: 2px solid red;
+    }
+</style>
+<body>
+    <button>CORS发送请求</button>
+    <div id="div2"></div>
+    <script>
+        const btn=document.querySelector('button');
+        btn.onclick=function(){
+            // 创建对象
+            const x=new XMLHttpRequest();
+            //设置
+            x.open("GET",'http://127.0.0.1:9000/cors-server');
+            //发送
+            x.send();
+            //绑定事件
+            x.onreadystatechange=function(){
+                if(x.readyState===4){
+                    if(x.status>=200&&x.status==300){
+                        //输出响应体
+                        console.log(x.response);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

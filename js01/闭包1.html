@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 
+
+     -->
+</head>
+
+<body>
+    <button>测试一</button>
+    <button>测试二</button>
+    <button>测试三</button>
+</body>
+<script type="text/javascript">
+    //点击某个按钮，提示点击的是第n个按钮
+    var btns = document.getElementsByTagName("button");
+    //这样的话每次循环都要统计一次btns.length的长度，效率低        for(var i=0;i<btns.length;i++){}
+    // 
+
+    //  for(var i=0,length=btns.length;i<length;i++){          //这样的话只需要统计一次  ★★★★★★★
+    //       var btn=btns[i];
+    //     btn.onclick=function(){
+    //     alert("第"+(i+1)+"个")          //这时候发现都是输出第4个，为什么呢
+    //     //而点击按钮的时候触发响应函数了，说明for循环已经执行完了，因为只有for循环执行完了才会给每个按钮都绑定上了响应函数
+    //     //所以当触发点击事件时，循环就已经完成了，即for循环完了 ，i为三，不变了，所以点击响应事件都显示i+1;
+    //  }
+    //  }     
+
+    //所以该如何实现呢
+    /* for(var i=0,length=btns.length;i<length;i++){          //这样的话只需要统计一次  ★★★★★★★
+           var btn=btns[i];
+           //将btn所对应的下标保存到每一个btn上
+           btn.index=i;
+                btn.onclick=function(){
+         alert("第"+(this.index+1)+"个")    
+                }
+    }     */          //  Alt+shift+A  选中多行代码进行注释操作
+
+    //下面再来一个新方法
+    for (var i = 0, length = btns.length; i < length; i++) {
+        (function (i) {
+            var btn = btns[i];
+            //将btn所对应的下标保存到每一个btn上
+            btn.onclick = function () {
+                alert("第" + (i + 1) + "个")
+            }
+        })(i);//匿名函数自调用
+    }
+
+    //上面的方法就是用到了闭包  ★★★★★
+
+   /*  1.如何产生闭包?
+当一个嵌套的内部(子)函数引用了嵌套的外部(父函数的变量(函数)时，就产生了闭包  ★★★★★★★★★
+       2.闭包到底是什么?           
+       闭包是一个函数加上到创建函数的作用域的链接，闭包关闭了函数的自由变量(即函数执行完变量应该回收，可闭包作用下就不回收)
+理解一:闭包是嵌套的内部函数(绝大部分人)
+理解二:包含被引用变量(函数)的对象(极少数人)
+注意:闭包存在于嵌套的内部函数中    
+      3.产生闭包的条件?
+函数嵌套
+内部函数引用了外部函数的数据(变量/函数)
+执行外部函数，不执行不会产生闭包
+      4.闭包优点  内部函数可以访问到外部函数的局部变量，保证其不会被回收，驻留在内存中
+ */
+
+function fn1(){
+    var a=2;
+    var b='abc'
+    function fn2(){  //执行函数定义就会产生闭包(不用调用内部函数) 
+        console.log(a);//输出a，闭包中只含有a变量，不涉及到b就没有b
+    }
+    fn2();
+}
+fn1();//没有输出结果
+//这个例子中function fn2(){console.log(a);}  就是一个闭包  但这个闭包没有发挥什么作用
+
+//将函数作为另一个函数的返回值
+function fn1(){
+    //此时闭包就已经存在(函数提升,内部函数对象已经创建了)
+    var a=2;
+    function fn2(){
+        a++;
+        console.log(a);         //输入log，选择带[_]正方形的，即可快速输出console.log()
+    }
+    return fn2;
+}
+var f=fn1();  //这里就产生闭包了    在嵌套内部函数定义执行完时就产生了(不是在调用)
+f();//  3 返回的是fn2这个函数；
+f();//4  a不断累加  说明a没有消失
+// 产生一个闭包， 看产生了几个内部函数对象，看调用了几次外部函数，这里时调用了两次内部函数
+ 
+//f=null;  这样含有闭包的函数对象fn1()没有接受值成为了垃圾对象，闭包死亡  ★★★★★
+
+
+//将函数作为实参传递给另一个函数
+function showDelay(msg,time){
+    setTimeout(function(){
+        alert(msg);//闭包里只有msg的属性
+    },time);
+}
+showDelay("hello",2000);
+
+
+/*
+闭包的作用
+1.使用函数内部的变量在函数执行完后，仍然存活在内存中(延长了局部变量的生命周期)
+2.让函数外部可以操作（读写）到函数内部的数据(变量/函数)  
+          对于局部数据而言，即为函数内部数据，外部不可见，但可以操作函数内部的数据
+
+问题  1 函数执行完后，函数内部声明的局部变量是否还存在？      
+ 一般是不存在，存在于闭包中的变量才可能是，而且需要一个值来接受  var f=fn1(); 比如这个var f
+2   在函数外部能直接访问函数内部的局部变量吗  不能，但是通过闭包可以让外部操作它
+*/
+
+
+
+//闭包的生命周期  
+//产生  ：在嵌套内部函数定义执行完时就产生了(不是在调用)
+//死亡  ； 在嵌套的内部函数成为垃圾对象时，即没有值接收
+</script>
+</html>

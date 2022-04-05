@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- ctrl 快速生成注释       html5 生成模板 -->
+    <!-- 
+    基本(值)类型    String Number Boolean undefined null
+    对象(引用)类型  Object(任意对象，包含后两者) Function(一种特别的对象，可以执行或者调用)函数定义：封装了一段可执行的具有一定功能的代码 
+                    Array(也属于特殊对象，数值下标)
+    判断
+       typeof   返回数据类型的字符串表达  可以判断 undefined，数值，字符串，布尔值  不能判断null和object,object和array
+       instanceof   判断对象的具体类型
+       ===全等  不会做数据转换  可以判断undefined，null    值相等             
+       ==相等，可以进行数据转换  全等
+    对象类型
+          
+      -->
+
+      <!-- 
+          undefined 和 null 的区别          undefined 是定义了未初始化(赋值)变量     null  空的对象，即定义且赋了值但是值为null
+          什么时候给变量赋值为null ★     1   初始赋值为null，表示将要赋值为对象，给未来要赋值对象的属性用null来占位  2结束时，让对象成为垃圾对象
+          严格区分变量类型和数据类型     变量类型(变量内存值的类型)包括  基本类型(保存的就是基本类型的数据)和引用类型(保存的地址值，栈空间存地址，堆空间存数据)   
+                                      数据类型包括  基本类型和对象类型
+       -->
+      <script type="text/javascript">
+          var a;
+          console.log(a,typeof a,typeof a==="undefined",a===undefined)// 打开浏览器检查发现  undefinde 'undefined' true true
+          var a="hello";
+          console.log(typeof a==='string')  //浏览器显示的类型都是小写(包括number，boolean) 返回true
+
+          var obj={
+              b1:[1,'abc',console.log],
+              b2:function(){
+                  console.log('b2')
+                  return function(){
+                      return "牛啊~"
+                  }
+              }
+          }
+
+          console.log(obj instanceof Object)//true  obj是Object对象的实例
+          console.log(obj.b1 instanceof Array,obj.b1 instanceof Object)//true   b1是Array对象的实例  true Array也是一个特殊的对象
+          console.log(obj.b2 instanceof Function)//  true  b2是Function对象的实例
+          console.log(typeof obj.b2=="function") //true  
+          console.log("---------------");
+          console.log(obj.b1[2]);
+          obj.b1[2]("hello");//obj.b1对应的是console.log()方法名， 调用方法的方式  方法名(); 
+          console.log(obj.b2()());//obj.b2是一个函数对象 obj.b2()进行调用，同时作为返回值进行调用，返回值(),这样就调用了return function()，返回规定的内容
+
+          var b=null//初始赋值为null，表示将要赋值为对象
+          b=['hello',123];//确定对象进行赋值
+          b=null;          //赋值为空用来清理对象， 让b指向null，没有引用指向就会默认为垃圾  ['hello',123](被浏览器回收)
+          console.log(b); //变为null  但没有释放内存 
+
+        /*
+        1 什么是数据  存储在内存中代表特定信息的东西，本质上是 0101...的之类的二进制数据
+                     数据的特点： 可传递 可运算  内存中所有操作的目标就是数据，如算术运算，逻辑运算，赋值，运行函数
+        2 什么是内存  内存条通电后产生的可存储数据的空间(临时的)      一块内存保存的2个数据 （ 内部存储的数据 ， 地址值）
+                     内存的分类   栈（全局变量和局部变量）     堆（对象）
+                     内存的产生和死亡  内存条(电路板)==》通电==》产生内存空间==》存储数据==》处理数据==》断电==》内存空间和数据都消失
+        3 什么是变量  可变化的量 由变量名和变量值组成 每个变量对应一小块内存，变量名用来查找对应的内存，变量值就是内存中保存的数据
+        4 内存 数据 变量 三者之间的关系       
+                      内存是用来存储数据的空间，变量是内存的标识
+        */
+
+        var obj={name:'tom'};//obj.name在堆空间的地址值保存到obj中
+        console.log(obj.name);// obj.name   .相当于取地址符
+        var a=obj;//将obj变量保存的内容拷贝保存到a中，不是obj的地址值!!注意
+        console.log(a.name);
+
+
+
+        /*
+        问题  var a=xxx, a内存中到底保存的是什么
+             如果xxx是基本类型的数据，保存的就是这个数据，   如果是对象，保存的则是对象的地址值
+             如果xxx是个变量    var b="abc"; var a=b      var b={}; var a=b;    保存的xxx的内存内容(可能是基本数据，也可能是地址值)
+
+        关于引用变量赋值问题
+            2个引用变量指向同一个对象，通过一个变量修改对象内部数据，另外一个变量也会进行变化
+            2个引用变量指向同一个对象，让其中一个引用变量指向另一个对象，另一个引用变量依然指向前一个对象
+        */
+        var obj={name:'拐子'}
+        var obj2=obj
+        obj2.name='野浩'
+        obj2.age=19
+        console.log('名字是'+obj2.name+'年龄为'+obj.age);
+        //用函数
+        function fu(o){
+            o.name="洪少"
+        }
+        fu(obj)
+        console.log(obj2.name);
+
+        var a={age:18}
+        var b=a;
+        a={age:20}
+        console.log(b.age);//输出的age是 18
+        function fu2(obj){
+            obj={age:15}
+        }
+        fu2(a)
+        console.log(a.age);//注意这个函数就相当于  var obj=a;  obj={age:15}; 即为将a赋给obj，obj在修改自己的age属性，跟a没关系★★★★★★★
+        //所以  a没变化，仍然是20 ，而obj没有被调用，被当作垃圾自动回收释放了
+        
+        /*
+        问题   在js调用函数时传递变量参数时，是值传递还是引用传递  
+                 都是值传递(但一些方面而言，对象类型又是引用传递)   但基本类型数据传的是内容值， 对象类型传的是地址值
+        */
+        var a=3;
+        function fn(a){
+            a=a+1
+        }
+        fn(a);
+        console.log(a);//输出3  传递的是a的值3，不是a这个变量
+        //实参a将3传递给形参a，函数内a通过运算变为4，但是a是函数形参，变4后自动释放a就没了，这里输出的a时全局变量a=3  所以是值传递
+        function fn2(b){
+           b.name="李四"
+        }
+        var b={name:"张三"}
+        fn2(b)  
+        console.log(b.name);   //地址传递
+
+        /*
+        问题  js引擎如何管理内存 
+             1 内存生命周期   分配小内存空间，得到它的使用权   存储数据，可以进行反复操作   释放小内存空间,获得内存不使用就是占用内存
+             2 释放内存   
+                  局部变量 函数执行完自动释放
+                  对象  称为垃圾对象==》由垃圾回收器回收
+        */
+        var a=3;   //开辟一个空间
+        var obj={};//也开辟一个空间
+        obj=null;  //注意，这里也不是释放内存，而是null作为值存了进去，undefined也是一样 
+        
+        function fn3(){
+            var b={};//局部变量  函数调用的时候才产生，函数执行完就自动释放
+        }
+        fn3();//这个函数里的b对象调用完，对应的空间自动释放，而b指向的对象是由垃圾回收器在之后的某个时刻被回收
+        //而全局的话只有页面关闭的时候全局作用域才会销毁
+      </script>
+</head>
+<body>
+    <h1>hdasddad</h1>
+</body>
+</html>

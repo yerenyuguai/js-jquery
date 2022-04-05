@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style id="div">
+    .div{
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        top: 50px;
+        left: 10px;
+        background: red;
+    }
+</style>
+<body>
+    <button id="btn1">慢慢淡出</button>
+    <button id="btn2">慢慢淡入</button>
+    <button id="btn3">淡出淡入切换</button>
+    <div class="div"></div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<!-- 
+    淡入淡出   不断改变元素的透明度来进行实现  opacity
+
+    参数    speed，easing 指定切换效果，function
+    fadeIn() 带动画的显示
+    fadeOut()  带动画隐藏
+    fadeToggle()   带动画切换显示/隐藏
+
+
+ -->
+<script>
+    var $div=$('.div')
+
+    //点击btn1，慢慢淡出 
+    $('#btn1').click(function(){
+        $div.fadeOut('slow')//不指定默认为 normal 400ms    fast 200ms   slow 600ms  也可以自定义
+        //$div.fadeOut(1000);
+    }) 
+    //点击btn2，慢慢淡入
+    $('#btn2').click(function(){
+        $div.fadeIn(1000);//和上面的一样
+    }) 
+    //点击btn3，淡出淡入切换，动画结束时提示：动画结束了
+    $('#btn3').click(function(){
+        $div.fadeToggle(function(){
+            alert('动画完成了');
+        });//
+    }) 
+</script>
+</html>

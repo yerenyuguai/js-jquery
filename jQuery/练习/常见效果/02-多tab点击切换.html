@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多tab切换</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    #tab li {
+        float: left;
+        list-style: none;
+        width: 80px;
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        text-align: center;
+    }
+    #container1 {
+        background: red;
+    }
+    #container2 {
+        background: yellow;
+    }
+    #container3 {
+        background: blue;
+    }
+    #container {
+        position: relative;
+        margin-top: 40px;
+        width: 300px;
+    }
+    #tab{
+        width: 50px;
+        height: 10px;
+        display: inline;
+    }
+    #tab1 {
+        background: red;
+    }
+    #tab2 {
+        background: yellow;
+    }
+    #tab3 {
+        background: blue;
+    }
+</style>
+
+<body>
+    <h2>多tab点击切换</h2>
+    <ul id="tab">
+        <li id="tab1" value="1">10元套餐</li>
+        <li id="tab2" value="2">30元套餐</li>
+        <li id="tab3" value="3">50元套餐</li>
+    </ul>
+    <div id="container">
+        <div id="container1">10元套餐详情<br>每月套餐内拨打100分钟，超出部分2毛/分钟 </div>
+        <div id="container2" style="display: none;">30元套餐详情<br>每月套餐内拨打300分钟，超出部分1.5毛/分钟 </div>
+        <div id="container3" style="display: none;">50元套餐详情<br>每月无限量随心打 </div>
+    </div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<script>
+//    var $contents=$('#container>div')
+// //给三个li添加监听  ★★★★★  隐式遍历
+//        $('#tab>li').click(function(){
+// //隐藏所有内容部分div
+//          $contents.css('display','none');
+// //显示对应内容
+// //得到当前点击的li在兄弟下标（tab里li集合的下标） 
+//           var index=$(this).index();
+//  //找到对应的内容div,并显示
+//  //         $contents[index].style.display='block';//$contents[index] 是DOM元素
+//  //               jQuery对象用css()修改
+//                $($contents[index]).css('display','block')
+//                })
+
+//对上面的方法进行优化
+var $contents=$('#container>div')
+//给三个li添加监听  ★★★★★  隐式遍历
+var divindex=0;//当前显示页面的下标
+$('#tab>li').click(function(){
+//隐藏当前页面部分div
+$contents[divindex].style.display='none'
+//显示对应内容
+//得到当前点击的li在兄弟下标（tab里li集合的下标） 
+ var index=$(this).index();
+ //找到对应的内容div,并显示
+ //  $contents[index].style.display='block';//$contents[index] 是DOM元素
+ //  jQuery对象用css()修改
+ $($contents[index]).css('display','block')
+ //更新下标
+ divindex=index;
+})
+</script>
+
+</html>

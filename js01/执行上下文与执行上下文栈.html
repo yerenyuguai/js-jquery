@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+</body>
+<!-- 
+
+  变量声明时如果不使用 var 关键字，那么它就是一个全局变量，即便它在函数内定义。 
+
+     1变量声明提升  
+       通过var定义(声明的变量),在定义语句前就可以访问到，不过值未定义 undefined
+     2 函数声明提升
+       通过function声明的函数，在之前就可以直接调用  值为函数定义（对象）
+     3 问题   变量提升和函数提升如何产生的  
+ -->
+<script type="text/javascript">
+    var a = 3;
+    // 函数提升  
+     fu();  //写在函数定义前
+    function fu() {
+        //相当于  var a; 但是没赋值
+        console.log(a);
+        var a = 4;
+    }
+    //fu();    //输出值为undefined,首先a值为3，之后函数里也有定义a, 这里的a var所以在函数内部第一行就定义，但是没有赋值
+//又因为是就近原则，所以输出了值为undefined的a,而a=3则没有被使用
+
+    /*
+     1 代码分布(位置)
+        全局代码
+        函数(局部)代码
+    2.全局执行上下文  顺序如下
+      在执行全局代码前将window确定为全局执行上下文
+      对全局数据进行预处理
+      var定义的全局变量==>undefined, 添加为window的属性
+      function声明的全局函数==>赋值(fun)， 添加为window的方法
+      this==> 赋值(window)
+      开始执行全局代码
+    3.函数执行上下文      顺序如下
+      在调用函数，准备执行函数体之前，创建对应的函数执行上下文对象
+      对局部数据进行预处理  局部变量位于栈内
+      形参变量==>赋值(实参)==>添加为执行上下文的属性
+      arguments==>赋值(实参列表)， 添加为执行上下文的属性
+      var定义的局部变量==>undefined, 添加为执行上下文的属性
+      function声明的函数==>赋值(fun)， 添加为执行上下文的方法
+      this==> 賦值(调用函数的对象)
+      开始执行函数体代码
+    */
+   //函数执行上下文
+   function fn(a1){
+       console.log(a1);//2
+       console.log(a2);//undefined  var a2;在函数内第一行声明，但没赋值
+       a3();//a3()
+       console.log(this);//window
+       console.log(arguments);//Agruements(2)   2,3  伪数组
+       var a2=3;
+       function a3(){
+           console.log('a3()');
+       }
+   }
+   fn(2,3);
+
+
+
+ /*
+1.在全局代码执行前，JS 引擎就会创建一一个栈来存储管理所有的执行上下文对象   先进后出
+2. 在全局执行上下文(window)确定后，将其添加到栈中(压栈)
+3.在函数执行上下文创建后，将其添加到栈中(压栈)
+4. 在当前函数执行完后,将栈顶的对象移除(出栈)       即为当前执行的代码就是位于栈顶的那个
+5. 当所有的代码执行完后， 栈中只剩下window  而且栈底总是window，即全局执行上下文有且只有一个，而且只能在底部
+ */  
+
+//调用的时候产生上下文对象
+ var a=10;//1  进入全局执行上下文(忽视上面的js代码，假设这个是第一行) 上下文对象window
+ var bar=function(x){
+   var b=5;
+   foo(x+b);// 3  进入foo执行上下文 上下文对象
+ }
+ var foo=function(y){
+   var c=5;
+   console.log(a+c+y);
+ }
+ bar(a);//   2   进入bar执行上下文上下文对象  
+ //  所以这一块代码一共有  2+1个函数执行上下文对象   1是window  2是函数执行的次数
+
+
+ /*相关习题
+ */
+console.log("global begin:"+i);//undefined
+var i=1;
+f22(1);
+function f22(i){
+  if(i==4){
+    return;
+  }
+  console.log('f22()begin'+i);//1  2  3 1之后递归f22(1+1),变为2，然后再递归直到i=4
+  f22(i+1);
+  console.log('f22()end:'+i);// 3  2  1 依次出栈
+}
+console.log("global end:"+i);//1 
+
+
+//  题2  先执行变量提升
+function aa(){
+}
+var aa;
+console.log(typeof aa);//  a没有赋值，而且函数提升大于变量提升 ，所以不是undefined而是function  ★★★
+  //当函数声明与变量名相同时，在变量赋值前，函数声明依旧是函数声明，不会被覆盖，
+  //但是如果一旦变量赋值了，函数声明就会被覆盖
+
+  //题3
+if(!(b in window)){  // !true  这样就不会执行
+    var b=1;
+}
+console.log(b);//b也是先定义了，然后window里面有，所以为true，然后再！，里面的赋值就没作用,输出undefined
+
+  //题目四
+  var c=1;
+  function c(c){
+    console.log(c);
+    var c=3;
+  }
+  // c(2)  报错，c is not a function  函数提升重新赋值了，导致c不是函数名字
+
+  //实际上变为
+  //  预编译阶段
+ //      var c;
+ //     function c(c){            只是定义了一个函数对象，函数内部的语句并没有执行 ★★★★  
+ //      }                         执行函数时，才会执行里面的语句 
+ //   赋值调用阶段
+ //   c=1;  这时候c就不是一个方法了
+//      c(2)     这怎么还能输出呢
+</script>
+</html>

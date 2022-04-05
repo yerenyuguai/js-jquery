@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--  ! 可以快速生成模板 -->
+</head>
+<body>
+    对象函数相关
+    <button id="btn">测试点击事件</button>
+</body>
+<script type="text/javascript">
+    /*
+    1 问题  什么是对象？   
+        多个数据的封装体，或用来保存多个数据的容器    
+    2 问题  为什么要用对象？
+        统一管理多个数据
+    3  对象的组成   属性(属性名(字符串类型,但引号可以不写) ，属性值，任意类型)        方法 一种特别的属性(属性值是函数)
+    4  如何访问对象内部数据
+             console.log(对象.属性名)  编码简单，有时不能用
+             对象["属性名"]  （要记住★）   通用
+    */
+    var p={
+        name:"拐子",
+        age:18,
+        setName:function(name){
+            this.name=name;
+        }
+    }
+    console.log(p.name,p.setName);//拐子    ƒ (name){ this.name=name;}
+    p.setName("野浩")
+    console.log(p.name);//更改为野浩
+    console.log(p["name"]);//另一个输出方式
+    p["setName"]("洪少");
+    console.log(p.name);//输出洪少
+
+    //什么时候我们只能用 对象["属性名"] 的方式
+    
+    //情况一   属性名中含有 -和 空格
+    var p={}
+    //给p对象添加一个属性 content-type:text/json   属性名:属性值
+    //   p.content-type='text/json'   会报错     属性名中含有特殊字符 - 空格  而这个就有，所以不能用
+    p['content-type']='text/json';  //这样就可以进行添加
+    console.log(p['content-type']);//读取时同样只可以这样
+
+    //情况二 属性名不确定  
+    var propName="myAge"
+    var value=100
+    //   p.propName=value  不能用
+    p[propName]=value;
+    console.log(p[propName]);//将propName的变量值作为属性名  p[propName]等价于 p.myAge
+
+
+
+    /*
+    函数
+
+    1  什么是函数    实现特定功能的n条语句的封装体(封装的思想)
+    2  为什么用函数   提高代码复用，便于交流阅读
+    3  如何定义函数    函数声明  表达式
+    4  如何执行(调用)函数     test()直接调用         obj.test()通过对象调用   new test()new调用    
+                               test.call(obj)或test.apply(obj)临时的让test成为obj的方法进行调用
+    */
+    function f1(age){
+        if(age<18){
+            console.log("未成年")
+        }else if(age>60){
+            console.log("老年卡")
+        }else{
+            console.log("成年人")
+        }
+    }
+    f1(22);
+
+    //函数声明
+    function f1(){}
+    //表达式
+    var f2=function(){}
+
+    //test.call(obj)或test.apply(obj)     临时的让test成为obj的方法进行调用
+    var obj={}
+    function test(){
+        this.name="临时方法"
+    }
+    //  obj.test() 这种调用方式显然不可以，obj里没有这个方法
+    test.call(obj);//让 test临时成为obj的方法
+    console.log(obj.name);//输出  "临时方法"     修改this指向   之前的初级笔记里有
+
+    /*
+       回调函数
+    1   什么函数才是回调函数  
+         程序员定义，浏览器调用，但最终会执行
+    2   常见的回调函数
+        dom事件回调函数    dom事件回调函数   Ajax请求回调函数   生命周期回调函数  (后面两个之后会讲)
+    */
+
+    //body里添加了一个按钮   
+    document.getElementById("btn").onclick=function(){//dom事件回调函数
+        alert(this.innerHTML);//获取按钮文本
+    }
+    //定时器   
+    // 超时(延时)定时器     
+    setTimeout(function(){//定时器回调函数
+        alert("hello");
+    },2000);
+
+
+
+
+    /*
+    IIFE    全称  Immediately-Invoked Function Expression   立即执行(调用)函数表达式     也可称为匿名函数自调用
+    作用    隐藏实现   不会污染外部(全局)命名空间
+    */
+    (function(){
+        console.log("~~~~~~~~~~~~");
+    })();     //  (匿名函数)();  立即执行
+
+    (function(){
+        var a=1;
+        function test(){
+            console.log(++a);
+        }
+        window.$=function(){//向外暴露一个全局函数(window)  function test(){console.log(++a);}
+            return {
+                test:test
+            }
+        }
+    })();
+    $().test()   //$在这里是一个函数名    $执行后返回的是一个对象，对象在调用test()方法 
+    
+    
+
+    /*
+    this   
+    1  什么是this   所有函数内部都有一个变量this，他的值是调用当前函数的当前对象
+                    任何函数本质上都是通过某个对象来调用的，如果没有直接指定那么就是window
+    2  如何确定this的值
+       test()  window
+       p.test()  p
+       new test()  新创建的对象
+       p.call(obj)  obj 
+    */
+   function Person(color){
+       console.log(this);//this 指调用Person的
+       this.color=color;
+       this.getColor=function(){
+           console.log(this);
+           return this.color;
+       };
+       this.setColor=function(color){
+           console.log(this);
+           this.color=color;
+       }
+   }
+   Person("red")//this指的是window
+   var p=new Person("yellow")//this指的是p
+   p.getColor();//this指的是p
+   var obj={};
+   p.setColor.call(obj,"black");//让setColor成为obj的临时方法  this就是obj
+   var test=p.setColor;//this.setColor=function(color){...}  将这个函数赋值给test
+   test();//this是指window，也是直接调
+
+   function fun1(){
+       function fun2(){
+           console.log(this);
+       }
+       fun2();//this是指window
+   }
+</script>
+</html>

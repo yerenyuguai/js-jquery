@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <!-- Dom的去hbuider里查看，这里是jQuery -->
+</head>
+<body>
+    <form action="" method="post">
+        你喜欢的运动是？
+        <input type="checkbox" id="checkedAllBox">全选/全不选
+        <br>
+        <input type="checkbox" name="items" value="足球">足球
+        <input type="checkbox" name="items" value="篮球">篮球
+        <input type="checkbox" name="items" value="羽毛球">羽毛球
+        <input type="checkbox" name="items" value="排球">排球
+        <br>
+        <input type="button" id="checkedAllBtn" value="全选">
+        <input type="button" id="checkedNoBtn" value="全不选">
+        <input type="button" id="checkedRevBtn" value="反选">
+        <input type="button" id="sendBtn" value="提交">
+    </form>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<script>
+/*
+功能说明:
+1.点击'全选':选中所有爱好
+2.点击'全不选': 所有爱好都不勾选
+3.点击'反选':改变所有爱好的勾选状态
+4.点击'提交':提示所有勾选的爱好
+5.点击'全选/全不选':选中所有爱好，或者全不选中
+6.点击某个爱好时，必要时更新’ 全选/全不选'的选中状态
+技术点:
+1. DOM查询
+2.事件回调函数绑定
+3. checkbox操作
+4.事件回调函数中的this
+5.逻辑思维能力
+*/
+var $checkedAllBox=$('#checkedAllBox')
+var $items=$(':checkbox[name=items]');//这样搜索范围更小
+
+//1.点击'全选':选中所有爱好
+$('#checkedAllBtn').click(function(){
+    $items.prop('checked',true);
+    //prop()  专门操作属性值布尔值的属性，比如这里的是否选中
+    $checkedAllBox.prop('checked',true);
+    //也将全选/全不选更改
+})
+
+//2.点击'全不选': 所有爱好都不勾选
+$('#checkedNoBtn').click(function(){
+    $items.prop('checked',false)
+    $checkedAllBox.prop('checked',false);
+})
+
+//3.点击'反选':改变所有爱好的勾选状态
+$('#checkedRevBtn').click(function(){
+   $items.each(function(){//将每个选择遍历，依次取反
+    this.checked=!this.checked;
+   })
+   //filter(:checked)  表示选中的   not(:checked)不选中的  filter(':not(:checked)')不选中的
+   // length===0 说明全勾上了，没有未选中的，说明这个值为true，其余情况就是false
+   //  ★★★★★★★★★★★
+   $checkedAllBox.prop('checked',$items.filter(':not(:checked)').length===0);
+   //$items.filter(':not(:checked)').length===0  和$items.filter(':checked').length===4 有异曲同工之妙
+})
+
+//4.点击'提交':提示所有勾选的爱好
+$('#sendBtn').click(function(){
+    $items.filter(':checked').each(function(){
+        //filter(':checked') 选中的  filter(':checked').each()选中的进行遍历
+        alert(this.value);
+    })
+})
+
+//5.点击'全选/全不选':选中所有爱好，或者全不选中
+$checkedAllBox.click(function(){
+    $items.prop('checked',this.checked);//this是当前每一个items
+})
+
+//6.点击某个爱好时，必要时更新’ 全选/全不选'的选中状态
+$items.click(function(){
+    $checkedAllBox.prop('checked',$items.filter(':not(:checked)').length===0);
+})
+</script>
+</html>

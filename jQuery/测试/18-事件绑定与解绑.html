@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        #out{
+            width: 200px;
+            height: 200px;
+            background: blue;
+        }
+        #inner{
+            width: 100px;
+            height: 100px;
+            background: red;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="out">外部div
+        <div id="inner">内部div</div>
+    </div>
+    <div class="divBtn">
+        <button id="btn1">取消所有绑定事件</button>
+        <button id="btn2">取消绑定mouseover事件</button>
+        <button id="btn3">测试事件坐标</button>
+        <a href="http://www.baidu.com" id="test4">百度一下</a>
+    </div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+<!-- 
+    1.事件绑定(2种):
+* eventName (function(){})
+绑定对应事件名的监听，例如: $('#div'). click(function(){});
+* on(eventName, funcion(){})
+通用的绑定事件监听，例如: $('#div'). on( 'click', function(){})
+*优缺点:
+eventName:编码方便，但只能加一个监听，且有的事件监听不支持
+on:编码不方便，可以添加多个监听，且更通用
+2.事件解绑:
+* off(eventName)
+3.事件的坐标
+event.clientX, event.clientY 相对于视口的左上角
+* event.pageX, event.pageY 相对于页面的左上角
+* event.offsetX, event.offsetY相对于事件元素左上角
+事件相关处理
+停止事件冒泡: event.stopPropagation()
+*阻止事件默认行为: event.preventDefault()
+ -->
+<!-- 
+需求:
+1.给#out绑定点击监听(用两种方法绑定)
+2.给#inner绑定鼠标移入和移出的事件监听(用3种方法绑定)
+3.点击btn1解除#inner上的所有事件监听
+4.点击btn2解除#inner上的mouseenter事件
+5.点击btn3得到事件坐标
+6.点击#inner区域， 外部点击监听不响应
+7.点击链接，如果当前时间是偶数不跳转
+ -->
+<script>
+//1.给#out绑定点击监听(用两种方法绑定)
+//    $('#out').click(function(){
+//        console.log('监听绑定完了');
+//     })    
+
+//方式二
+//   $('#out').on('click',function(){
+//       console.log('监听绑定完了');
+//    })
+
+
+//2.给#inner绑定鼠标移入和移出的事件监听(用3种方法绑定)
+$('#inner')
+.mouseenter(function(){// mouseenter 鼠标进入
+    console.log('鼠标移入');
+})
+.mouseleave(function(){// mouseleave 鼠标移出
+    console.log('鼠标移出');
+})
+/*
+方法二
+$('#inner')
+.on('mouseenter',function(){
+    console.log('鼠标移入');
+})
+.on('mouseleave',function(){
+    console.log('鼠标移出');
+})
+
+方法三    ★★★
+$('#inner').hover(function(){ 
+    console.log('鼠标移入');
+},function(){ 
+    console.log('鼠标移出');
+})
+*/
+
+
+//3.点击btn1解除#inner上的所有事件监听 off()解除 ,里面如果传参就是解除指定的事件名字
+$('#btn1').click(function(){
+    $('#inner').off();
+})
+
+//4.点击btn2解除#inner上的mouseenter事件
+$('#btn2').click(function(){
+    $('#inner').off('mouseenter');
+})
+
+//5.点击btn3得到事件坐标
+$('#btn3').click(function(event){//event事件对象
+console.log(event.offsetX,event.offsetY); //相对于事件元素左上角
+console.log(event.pageX,event.pageY);//原点是页面的左上角
+console.log(event.clientX,event.clientY);//相对于视口(窗口)的左上角
+})
+
+
+//6.点击#inner区域， 外部点击监听不响应
+$('#inner').click(function(event){
+console.log('hello inner');
+//防止事件冒泡（如果内部点击没响应，会去往上一层）
+event.stopPropagation();
+})
+
+//7.点击链接，如果当前时间是偶数不跳转
+$('#test4').click(function(event){
+    if(Date.now()%2==0){
+        //阻止默认行为，超链接点击默认跳转
+        event.preventDefault();
+    }
+})
+</script>
+<!-- 
+    区别mouseover和mouseenter
+    mouseover  在移入子元素时，也会触发，对应是mouseout
+    mouseenter  只有移入当前元素是才会触发，对应是mouseleave
+                hover()使用的就是mouseenter()和mouseleave()
+
+    区别on('eventName',fun)与eventName(fun)
+      on('eventName',fun) 通用，但是编码麻烦   比如 on('click',function(){})
+      eventName(fun)  编码简单，但有的事件没有这个方法
+ -->
+</html>
