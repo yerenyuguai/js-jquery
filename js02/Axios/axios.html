@@ -16,8 +16,8 @@
 <script >
 
     const btns1=document.querySelectorAll('button');
-    //配置 baseURL
-     axios.defaults.baseURL='http://127.0.0.1:8000';
+    //配置 baseURL  后面的路径都以这个为前缀 
+    axios.defaults.baseURL='http://127.0.0.1:8000';
     btns1[0].onclick=function(){
         //GET请求
         axios.get('/axios-server',{
@@ -27,10 +27,10 @@
                 vip:7
             },
             //设置头信息
-            Headers:{
+            headers:{
                 age:20,
                 sex:'man'
-            }//不知道为啥不显示。。。。
+            }
         }).then(value=>{
             console.log(value);
         })
@@ -48,8 +48,8 @@
                 id:200,
                 vip:9
             },
-            //请求头参数,  不知道那里的原因
-            Headers:{
+            //请求头参数
+            headers:{
                 height:180,
                 weight:140
             }

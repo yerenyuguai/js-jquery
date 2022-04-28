@@ -11,7 +11,7 @@ const app=express();
 //创建路由规则    request 是对请求报文的封装   response是对响应报文的封装   
 //app.get  适合get的请求方式
 app.get('/server',(request,response)=>{
-    //设置响应头
+    //设置响应头  设置允许跨域，所有类型的头信息都可以接受
     response.setHeader('Access-Control-Allow-Origin','*');
     //设置响应体
     response.send('hello AJAX GET');
@@ -27,7 +27,7 @@ app.post('/server',(request,response)=>{
 app.all('/server',(request,response)=>{
     //设置响应头
     response.setHeader('Access-Control-Allow-Origin','*');
-     //设置自定义的响应头  这样可以自定义
+     //设置自定义的响应头  这样可以自定义，这样所有的头信息都可以接受，包括自定义
      response.setHeader('Access-Control-Allow-Headers','*');//  *表示所有类型的头信息都可以接受
     //设置相应体
     response.send('hello AJAX');
@@ -45,10 +45,10 @@ app.all('/JSON-server',(request,response)=>{
          age:19
      }
     //因为send()只能接受字符串和Buffer (buffer缓冲区，专门存储二进制数据，用法与数组类似)
-    //所以需要将对象进行字符串转化
+    //所以需要将对象进行字符串转化  转换为json格式
     let str=JSON.stringify(data);
 
-    //设置相应体
+    //设置相应体，将响应数据传递出去
     response.send(str);
 });
 

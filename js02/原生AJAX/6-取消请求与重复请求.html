@@ -27,6 +27,8 @@ btns[0].onclick=function(){
     if(isSending){
         //如果正在发送，则取消该请求，创建一个新请求
         x.abort();
+        //如果该请求已被发出，x.abort() 方法将终止该请求。
+        //当一个请求被终止，它的  readyState 将被置为 XMLHttpRequest.UNSENT (0)，并且请求的 status 置为 0。
     }
     isSending=true;
     x.open('GET','http://127.0.0.1:8000/delay');
